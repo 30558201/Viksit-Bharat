@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viksit Bharat by VEXA | Enterprise Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================================
+           VIKSIT BHARAT - E-GOVERNANCE THEME SYSTEM
+           ========================================================= */
+        :root {
+            /* India Theme Colors */
+            --saffron: #FF9933;
+            --white: #FFFFFF;
+            --green: #138808;
+            --navy-primary: #003366; /* Ashoka Blue / Official Gov Blue */
+            --navy-hover: #004080;
+            --navy-light: #002244;
+            
+            /* UI Colors */
+            --bg-light: #F4F6F8;
+            --border-subtle: #E2E8F0;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --accent-blue: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --info: #8B5CF6;
+            
+            /* Elevations & Styling */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+            --radius-md: 6px;
+            --radius-lg: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); overflow: hidden; height: 100vh; }
+        
+        /* Utility */
+        .hidden { display: none !important; }
+        .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.6s ease-in-out; }
+        .fade-in { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Tricolor Header Strip */
+        .tricolor-strip {
+            height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10000;
+            background: linear-gradient(to right, var(--saffron) 33.33%, var(--white) 33.33%, var(--white) 66.66%, var(--green) 66.66%);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .brand-logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--border-subtle); padding: 2px; }
+
+        /* =========================================================
+           PART 1: ADMIN LOGIN OVERLAY
+           ========================================================= */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--navy-primary) 0%, var(--navy-light) 100%);
+            display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 20px;
+        }
+
+        .login-card {
+            background: var(--white); width: 100%; max-width: 440px; padding: 45px 40px;
+            border-radius: var(--radius-lg); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4); text-align: center;
+            position: relative; overflow: hidden; border-top: 5px solid var(--saffron);
+        }
+
+        .logo-placeholder {
+            width: 85px; height: 85px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
+        }
+
+        .login-card h2 { color: var(--navy-primary); font-size: 26px; margin-bottom: 5px; font-weight: 700; letter-spacing: -0.5px; }
+        .login-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 35px; font-weight: 500; }
+
+        .form-group { text-align: left; margin-bottom: 22px; position: relative; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 16px; border: 1.5px solid var(--border-subtle); background: #F8FAFC;
+            border-radius: var(--radius-md); font-size: 14px; transition: var(--transition); color: var(--text-main);
+        }
+        .form-group input.has-icon { padding-left: 42px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none; border-color: var(--navy-primary); background: var(--white); box-shadow: 0 0 0 3px rgba(0,51,102,0.1); 
+        }
+        .form-group .icon { position: absolute; left: 15px; top: 38px; color: var(--text-muted); font-size: 15px; }
+        .form-group.error input { border-color: var(--danger); }
+        .error-msg { color: var(--danger); font-size: 12px; margin-top: 5px; display: none; font-weight: 500;}
+
+        .captcha-container { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+        .captcha-box { 
+            background: var(--bg-light); padding: 12px 20px; letter-spacing: 6px; font-weight: 700; 
+            font-size: 18px; color: var(--navy-primary); border-radius: var(--radius-md);
+            border: 1px dashed var(--text-muted); user-select: none; text-decoration: line-through; width: 100%; text-align: center;
+        }
+        .btn-refresh { background: var(--border-subtle); border: none; border-radius: var(--radius-md); color: var(--text-main); cursor: pointer; padding: 0 15px; height: 48px; transition: var(--transition); }
+        .btn-refresh:hover { background: var(--text-muted); color: var(--white); }
+
+        .btn-primary {
+            width: 100%; padding: 15px; background: var(--navy-primary); color: var(--white);
+            border: none; border-radius: var(--radius-md); font-size: 15px; font-weight: 600; 
+            cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 51, 102, 0.2);
+        }
+        .btn-primary:hover { background: var(--navy-hover); transform: translateY(-1px); box-shadow: 0 6px 8px -1px rgba(0, 51, 102, 0.3); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* =========================================================
+           PART 2: DASHBOARD LAYOUT & RESPONSIVENESS
+           ========================================================= */
+        .dashboard-wrapper { display: flex; height: 100vh; width: 100%; position: relative; padding-top: 5px; /* For tricolor strip */ }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 270px; background: var(--navy-primary); color: var(--white); display: flex; 
+            flex-direction: column; transition: var(--transition); box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 50;
+        }
+        .sidebar-header { padding: 25px 20px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; letter-spacing: 0.5px; }
+        .nav-section { padding: 20px 0 8px 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #94A3B8; font-weight: 700; }
+        .sidebar-menu { list-style: none; flex: 1; overflow-y: auto; padding-bottom: 20px; }
+        .sidebar-menu li a {
+            display: flex; align-items: center; padding: 14px 20px; color: #E2E8F0; text-decoration: none; 
+            font-size: 14px; font-weight: 500; transition: var(--transition); border-left: 4px solid transparent; cursor: pointer;
+        }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: rgba(255,255,255,0.1); color: var(--white); border-left-color: var(--saffron); }
+        .sidebar-menu li a i { margin-right: 14px; width: 18px; text-align: center; font-size: 15px; }
+
+        /* Main Content */
+        .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-light); }
+        
+        .topbar {
+            height: 75px; background: var(--white); border-bottom: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 35px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .topbar-left { display: flex; align-items: center; gap: 20px; }
+        .menu-toggle { background: none; border: none; font-size: 22px; color: var(--navy-primary); cursor: pointer; transition: var(--transition); }
+        .menu-toggle:hover { color: var(--saffron); }
+        .topbar-title { font-weight: 700; font-size: 20px; display: flex; align-items: center; gap: 10px; color: var(--navy-primary); }
+        
+        .content-area { padding: 35px; overflow-y: auto; flex: 1; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
+        
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 35px; }
+        .stat-card {
+            background: var(--white); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-sm); transition: var(--transition); border-left: 4px solid var(--navy-primary);
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .stat-card.orange { border-left-color: var(--saffron); }
+        .stat-card.green { border-left-color: var(--green); }
+        .stat-card .title { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .stat-card .value { font-size: 32px; font-weight: 700; color: var(--navy-primary); }
+
+        /* Data Table */
+        .table-container { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-md); overflow-x: auto; margin-bottom: 20px;}
+        .table-header { padding: 20px 25px; border-bottom: 1px solid var(--border-subtle); font-weight: 700; font-size: 16px; color: var(--navy-primary); display: flex; justify-content: space-between; align-items: center;}
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; }
+        th { background: #F8FAFC; padding: 16px 25px; font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; border-bottom: 2px solid var(--border-subtle); letter-spacing: 0.5px; }
+        td { padding: 18px 25px; font-size: 14px; border-bottom: 1px solid var(--border-subtle); color: var(--text-main); vertical-align: middle; }
+        tr:hover td { background: #F1F5F9; }
+        .empty-state { padding: 50px; text-align: center; color: var(--text-muted); font-size: 15px; font-weight: 500; }
+        
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; letter-spacing: 0.5px;}
+        .badge.pending { background: #FFF7ED; color: #C2410C; border: 1px solid #FED7AA; }
+        .badge.approved { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+        .badge.published { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+        .badge.ongoing { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+        .badge.completed { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+        .badge.rejected { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+        .badge.scheduled { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+        
+        /* Category Badges for Spotlight */
+        .badge.news { background: #EFF6FF; color: #1E3A8A; border: 1px solid rgba(30, 58, 138, 0.2); }
+        .badge.announcement { background: #F1F5F9; color: #334155; border: 1px solid rgba(51, 65, 85, 0.2); }
+
+        .actions-cell { display: flex; gap: 8px; flex-wrap: wrap; }
+        .action-btn { background: var(--white); border: 1px solid var(--border-subtle); padding: 8px 14px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main); transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .action-btn:hover { background: var(--bg-light); border-color: var(--navy-primary); color: var(--navy-primary); }
+        .action-btn.verify:hover { background: #F0FDF4; border-color: #16A34A; color: #16A34A; }
+        .action-btn.reject:hover { background: #FEF2F2; border-color: #DC2626; color: #DC2626; }
+        .action-btn.schedule:hover { background: #EFF6FF; border-color: #2563EB; color: #2563EB; }
+
+        /* Modals & Toasts */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center; z-index: 10000; padding: 20px;
+        }
+        .modal-card { background: var(--white); width: 100%; max-width: 550px; border-radius: var(--radius-lg); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; animation: fadeIn 0.3s ease; max-height: 90vh; display: flex; flex-direction: column; border-top: 5px solid var(--navy-primary); }
+        .modal-card.full-screen { max-width: 850px; }
+        .modal-header { padding: 20px 25px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; }
+        .modal-header h3 { font-size: 18px; color: var(--navy-primary); font-weight: 700; }
+        .modal-body { padding: 25px; overflow-y: auto; flex: 1; }
+        .modal-footer { padding: 20px 25px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end; gap: 12px; background: #F8FAFC; }
+        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); transition: var(--transition); }
+        .close-btn:hover { color: var(--danger); }
+
+        .toast-container { position: fixed; top: 25px; right: 25px; z-index: 100000; display: flex; flex-direction: column; gap: 12px; }
+        .toast {
+            background: var(--white); border-left: 5px solid var(--navy-primary); padding: 16px 20px;
+            border-radius: var(--radius-md); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 15px; 
+            font-size: 14px; font-weight: 600; animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: var(--text-main); min-width: 300px;
+        }
+        .toast.success { border-left-color: var(--green); }
+        .toast.success i { color: var(--green); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.error i { color: var(--danger); }
+        .toast.warning { border-left-color: var(--saffron); }
+        .toast.warning i { color: var(--saffron); }
+        @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Filter Tabs */
+        .filter-tabs { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn {
+            background: var(--white); border: 1px solid var(--border-subtle);
+            color: var(--text-muted); padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition);
+        }
+        .tab-btn:hover { border-color: var(--navy-light); color: var(--navy-primary); }
+        .tab-btn.active { background: var(--navy-primary); color: var(--white); border-color: var(--navy-primary); }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; height: 100%; transform: translateX(-100%); z-index: 100; }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .topbar { padding: 0 20px; }
+            .content-area { padding: 20px; }
+            .modal-card { max-height: 95vh; margin: 10px; }
+            .dashboard-wrapper.sidebar-active::after {
+                content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.6); z-index: 90;
+            }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tricolor-strip"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, updateDoc, getDoc, addDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdJ6FtbZFkaH4f-BOQPSy7Ar0s9E9-xbI",
+            authDomain: "viksit-bharat-7b31b.firebaseapp.com",
+            projectId: "viksit-bharat-7b31b",
+            storageBucket: "viksit-bharat-7b31b.firebasestorage.app",
+            messagingSenderId: "160619074109",
+            appId: "1:160619074109:web:4debfff234fd24aad09054",
+            measurementId: "G-LRZ55EHB0M"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make Firebase services available globally
+        window.fbAuth = auth;
+        window.fbDb = db;
+        window.fbSignIn = signInWithEmailAndPassword;
+        window.fbSignOut = signOut;
+        window.fbOnAuth = onAuthStateChanged;
+        window.fbCollection = collection;
+        window.fbQuery = query;
+        window.fbWhere = where;
+        window.fbGetDocs = getDocs;
+        window.fbDoc = doc;
+        window.fbUpdateDoc = updateDoc;
+        window.fbGetDoc = getDoc;
+        
+        // ADDED FOR NEW FUNCTIONALITY
+        window.fbAddDoc = addDoc;
+        window.fbOrderBy = orderBy;
+        
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
+    <div class="toast-container" id="toastBox"></div>
+
+    <div id="login-overlay">
+        <div class="login-card">
+            <div class="logo-placeholder">
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczPLQl0gLFCsgck1QzP7XaC6K3W6AP7u-PD55uAMKcX7OB0TTmqli9_OMiURrXzzFM4VkA6-e0G83bdUhwGBBwkmpQlMnogFp9RrVhqEAo9bsm8gk7oN1pQ2wlnPFNVe-phI4Fxic1hlUuZGS0ELGbQ=w632-h649-s-no-gm?authuser=0" class="brand-logo" alt="Gov Logo" onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=`fa-solid fa-building-columns` style=`font-size: 40px; color: var(--navy-primary);`></i>';">
+            </div>
+            <h2>Admin Portal</h2>
+            <p>Viksit Bharat Enterprise System</p>
+
+            <form id="loginForm" novalidate>
+                <div class="form-group" id="emailGroup">
+                    <label>Official Email ID</label>
+                    <i class="fa-solid fa-envelope icon"></i>
+                    <input type="email" id="adminEmail" class="has-icon" placeholder="admin@viksitbharat.in" required>
+                    <div class="error-msg">Valid admin email is required.</div>
+                </div>
+                
+                <div class="form-group" id="passwordGroup">
+                    <label>Secure Password</label>
+                    <i class="fa-solid fa-lock icon"></i>
+                    <input type="password" id="adminPassword" class="has-icon" placeholder="••••••••" required>
+                    <div class="error-msg">Password is required.</div>
+                </div>
+
+                <div class="form-group" id="captchaGroup">
+                    <label>Security Captcha</label>
+                    <div class="captcha-container">
+                        <div class="captcha-box" id="captchaDisplay">A7bX9Q</div>
+                        <button type="button" class="btn-refresh" onclick="AuthSystem.generateCaptcha()" title="Refresh Captcha"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                    <input type="text" id="captchaInput" placeholder="Enter CAPTCHA exactly" required>
+                    <div class="error-msg">Captcha incorrect. Case-sensitive.</div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="loginBtn">Authorize Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="dashboard-wrapper hidden" id="dashboard-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczPLQl0gLFCsgck1QzP7XaC6K3W6AP7u-PD55uAMKcX7OB0TTmqli9_OMiURrXzzFM4VkA6-e0G83bdUhwGBBwkmpQlMnogFp9RrVhqEAo9bsm8gk7oN1pQ2wlnPFNVe-phI4Fxic1hlUuZGS0ELGbQ=w632-h649-s-no-gm?authuser=0" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); object-fit: cover;" onerror="this.style.display='none'">
+                VEXA ADMIN
+            </div>
+            <ul class="sidebar-menu" id="mainMenu">
+                <li class="nav-section">Citizens' Thoughts</li>
+                <li><a data-target="dashboardHome" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard Overview</a></li>
+                <li><a data-target="thoughts" data-status="pending"><i class="fa-solid fa-clock"></i> Pending Validation</a></li>
+                <li><a data-target="thoughts" data-status="approved"><i class="fa-solid fa-check-circle"></i> Approved Entries</a></li>
+                <li><a data-target="thoughts" data-status="scheduled"><i class="fa-solid fa-calendar-days"></i> Scheduled Actions</a></li>
+                <li><a data-target="thoughts" data-status="rejected"><i class="fa-solid fa-ban"></i> Rejected Entries</a></li>
+                
+                <li class="nav-section">Communication (CEO)</li>
+                <li><a data-target="contact_to_ceo" data-status="pending"><i class="fa-solid fa-envelope"></i> Pending Contact</a></li>
+                <li><a data-target="contact_to_ceo" data-status="approved"><i class="fa-solid fa-envelope-circle-check"></i> Approved Contact</a></li>
+                <li><a data-target="contact_to_ceo" data-status="scheduled"><i class="fa-solid fa-calendar-check"></i> Scheduled Contact</a></li>
+                <li><a data-target="contact_to_ceo" data-status="rejected"><i class="fa-solid fa-times-circle"></i> Rejected Contact</a></li>
+                
+                <li class="nav-section">National Spotlight</li>
+                <li><a data-target="spotlightManager"><i class="fa-solid fa-newspaper"></i> Manage Spotlight</a></li>
+
+                <li class="nav-section">Learning & Leaderboard</li>
+                <li><a data-target="courseManager"><i class="fa-solid fa-graduation-cap"></i> Manage Courses</a></li>
+                <li><a data-target="leaderboardManager"><i class="fa-solid fa-trophy"></i> Manage Leaderboard</a></li>
+
+                <li class="nav-section">System Administration</li>
+                <li><a onclick="AuthSystem.logout()"><i class="fa-solid fa-power-off"></i> Secure Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-container">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" onclick="UISystem.toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                    <div class="topbar-title" id="topbarTitle">Dashboard Overview</div>
+                </div>
+                <div>
+                    <span style="font-size: 14px; font-weight: 700; color: var(--navy-primary); background: var(--bg-light); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-subtle);" id="currentUserLabel">Admin</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                
+                <div id="dashboardHome" class="view-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card orange">
+                            <div class="title">Pending Thoughts</div>
+                            <div class="value" id="statPendingThoughts">...</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="title">Approved Thoughts</div>
+                            <div class="value" style="color: var(--green)" id="statApprovedThoughts">...</div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="title">Pending Contacts</div>
+                            <div class="value" id="statPendingContacts">...</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="title">Scheduled Items</div>
+                            <div class="value" style="color: var(--accent-blue)" id="statScheduled">...</div>
+                        </div>
+                    </div>
+                    <div style="background: var(--white); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);">
+                        <h3 style="color: var(--navy-primary); margin-bottom: 10px; font-size: 20px;">Welcome to the Viksit Bharat Administrative Portal</h3>
+                        <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">This system securely manages citizens' inputs, thoughts, and direct communications. Please use the sidebar to navigate through pending requests, schedule follow-ups, or approve valid entries for the public forum.</p>
+                    </div>
+                </div>
+
+                <div id="dataTableSection" class="view-section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <span id="tableTitle">Data Management</span>
+                            <button class="action-btn" onclick="DataSystem.loadCurrentView()" style="background: var(--navy-primary); color: white; border: none;"><i class="fa-solid fa-rotate-right"></i> Sync Data</button>
+                        </div>
+                        <table id="mainTable">
+                            <thead id="tableHead"></thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="spotlightSection" class="view-section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <span>National Spotlight Entries</span>
+                            <button class="action-btn" onclick="UISystem.openModal('addSpotlightModal')" style="background: var(--navy-primary); color: white; border: none;"><i class="fa-solid fa-plus"></i> Add New Spotlight</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr><th>Date</th><th>Headline</th><th>Category</th><th>Edited By</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="spotlightTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="coursesSection" class="view-section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <span>Learning Modules</span>
+                            <button class="action-btn" onclick="UISystem.openModal('addCourseModal')" style="background: var(--navy-primary); color: white; border: none;"><i class="fa-solid fa-plus"></i> Add New Course</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr><th>Created</th><th>Course Title</th><th>Master</th><th>Duration</th><th>Status</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody id="coursesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="leaderboardSection" class="view-section">
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" onclick="LearningManager.setLbFilter('daily', this)">Daily</button>
+                        <button class="tab-btn" onclick="LearningManager.setLbFilter('weekly', this)">Weekly</button>
+                        <button class="tab-btn" onclick="LearningManager.setLbFilter('monthly', this)">Monthly</button>
+                        <button class="tab-btn" onclick="LearningManager.setLbFilter('alltime', this)">All Time</button>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <span id="lbSectionTitle">Leaderboard - Daily</span>
+                            <button class="action-btn" onclick="UISystem.openModal('addLeaderboardModal')" style="background: var(--navy-primary); color: white; border: none;"><i class="fa-solid fa-plus"></i> Add Entry</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr><th>Rank</th><th>Participant Name</th><th>Score</th><th>Category</th><th>Added On</th></tr>
+                            </thead>
+                            <tbody id="leaderboardTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay hidden" id="viewModal">
+        <div class="modal-card full-screen">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-lines" style="margin-right:10px; color: var(--saffron);"></i> Detailed Submission Record</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="viewModalContent"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="verifyModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Approve Submission</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 15px; color: var(--text-main); font-weight: 500;">Are you sure you want to approve this submission? It will be marked as officially verified and live on the platform.</p>
+                <input type="hidden" id="approveDocId">
+                <input type="hidden" id="approveDocType">
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                <button class="btn-primary" style="width: auto; padding: 10px 24px; background: var(--green);" onclick="DataSystem.executeAction('approved')"><i class="fa-solid fa-check"></i> Confirm Approval</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="rejectModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Reject Submission</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="rejectDocId">
+                <input type="hidden" id="rejectDocType">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Rejection Note (Mandatory for transparency)</label>
+                    <textarea id="rejectReason" rows="4" placeholder="Please specify the reason for rejection..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                <button class="btn-primary" style="width: auto; padding: 10px 24px; background: var(--danger);" onclick="DataSystem.executeAction('rejected')"><i class="fa-solid fa-ban"></i> Confirm Rejection</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="scheduleModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Schedule Future Action</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="scheduleDocId">
+                <input type="hidden" id="scheduleDocType">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Select Date & Time for Follow-up/Publish</label>
+                    <input type="datetime-local" id="scheduleDate" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                <button class="btn-primary" style="width: auto; padding: 10px 24px; background: var(--accent-blue);" onclick="DataSystem.executeAction('scheduled')"><i class="fa-solid fa-calendar-check"></i> Save Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="addSpotlightModal">
+        <div class="modal-card full-screen">
+            <div class="modal-header">
+                <h3>Publish National Spotlight</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="formSpotlight" onsubmit="SpotlightManager.saveSpotlight(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group"><label>Headline *</label><input type="text" id="spHeadline" required></div>
+                        <div class="form-group"><label>Edited By *</label><input type="text" id="spEditor" required></div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="spCategory" required>
+                                <option value="news">News</option>
+                                <option value="announcement">Announcement</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Featured Image URL (Optional)</label><input type="url" id="spImage" placeholder="https://..."></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Short Summary (2-3 lines preview) *</label><textarea id="spSummary" rows="2" required></textarea></div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Full Content (Basic HTML/Rich Text supported) *</label>
+                            <textarea id="spContent" rows="6" placeholder="Enter article content..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="padding: 20px 0 0 0; background: none; border: none;">
+                        <button type="button" class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 10px 24px;"><i class="fa-solid fa-paper-plane"></i> Publish Spotlight</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="addCourseModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Add New Course Module</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCourse" onsubmit="LearningManager.saveCourse(event)">
+                    <div class="form-group"><label>Course Title *</label><input type="text" id="cTitle" required></div>
+                    <div class="form-group"><label>Master Name *</label><input type="text" id="cMaster" required></div>
+                    <div class="form-group"><label>Course Duration (in Days) *</label><input type="number" id="cDuration" min="1" required></div>
+                    <div class="form-group"><label>Course Description *</label><textarea id="cDesc" rows="3" required></textarea></div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="cStatus" required>
+                            <option value="ongoing">Ongoing</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer" style="padding: 20px 0 0 0; background: none; border: none;">
+                        <button type="button" class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 10px 24px;"><i class="fa-solid fa-save"></i> Save Course</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="manageLecturesModal">
+        <div class="modal-card full-screen">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-book-open"></i> Lectures for: <span id="mlCourseTitle" style="color:var(--saffron);"></span></h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
+                    <button class="btn-primary" style="width: auto; padding: 8px 16px;" onclick="LearningManager.openAddLectureModal()"><i class="fa-solid fa-plus"></i> Add New Lecture</button>
+                </div>
+                <div class="table-container" style="margin-bottom: 0;">
+                    <table>
+                        <thead>
+                            <tr><th>No.</th><th>Theme</th><th>Lecture Title</th><th>Added On</th></tr>
+                        </thead>
+                        <tbody id="lecturesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="addLectureModal">
+        <div class="modal-card full-screen">
+            <div class="modal-header">
+                <h3>Add New Lecture</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="formLecture" onsubmit="LearningManager.saveLecture(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group"><label>Lecture Number *</label><input type="number" id="lNumber" min="1" required></div>
+                        <div class="form-group"><label>Lecture Theme *</label><input type="text" id="lTheme" placeholder="e.g. Governance" required></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Lecture Topic Title *</label><input type="text" id="lTitle" required></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Lecture Full Content *</label><textarea id="lContent" rows="6" required></textarea></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Assessment Questions (One per line) *</label><textarea id="lQuestions" rows="4" required></textarea></div>
+                    </div>
+                    <div class="modal-footer" style="padding: 20px 0 0 0; background: none; border: none;">
+                        <button type="button" class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 10px 24px;"><i class="fa-solid fa-save"></i> Save Lecture</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="addLeaderboardModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Add Leaderboard Entry</h3>
+                <button class="close-btn" onclick="UISystem.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="formLeaderboard" onsubmit="LearningManager.saveLeaderboard(event)">
+                    <div class="form-group"><label>Participant Name *</label><input type="text" id="lbName" required></div>
+                    <div class="form-group"><label>Score (Points) *</label><input type="number" id="lbScore" min="0" required></div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="lbCategory" required>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="alltime">All Time</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer" style="padding: 20px 0 0 0; background: none; border: none;">
+                        <button type="button" class="action-btn" onclick="UISystem.closeModals()">Cancel</button>
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 10px 24px;"><i class="fa-solid fa-save"></i> Save Entry</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // ==========================================
+        // UI & NOTIFICATION SYSTEM
+        // ==========================================
+        const NotificationSystem = {
+            show: (message, type = 'info') => {
+                const box = document.getElementById('toastBox');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                let icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info');
+                toast.innerHTML = `<i class="fa-solid ${icon} fa-lg"></i> <span>${message}</span>`;
+                box.appendChild(toast);
+                setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 600); }, 4000);
+            }
+        };
+
+        const UISystem = {
+            toggleSidebar: () => {
+                const sidebar = document.getElementById('sidebar');
+                if(window.innerWidth <= 768) {
+                    sidebar.classList.toggle('mobile-open');
+                    document.getElementById('dashboard-wrapper').classList.toggle('sidebar-active');
+                } else {
+                    sidebar.classList.toggle('collapsed');
+                }
+            },
+            openModal: (modalId) => {
+                // Ensure forms are reset when opened
+                if(modalId === 'addSpotlightModal') document.getElementById('formSpotlight').reset();
+                if(modalId === 'addCourseModal') document.getElementById('formCourse').reset();
+                if(modalId === 'addLectureModal') document.getElementById('formLecture').reset();
+                if(modalId === 'addLeaderboardModal') document.getElementById('formLeaderboard').reset();
+                document.getElementById(modalId).classList.remove('hidden');
+            },
+            closeModals: () => {
+                document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+                const rr = document.getElementById('rejectReason'); if(rr) rr.value = '';
+                const sd = document.getElementById('scheduleDate'); if(sd) sd.value = '';
+            },
+            switchView: (targetId, title) => {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                document.getElementById(targetId).classList.add('active');
+                document.getElementById('topbarTitle').innerHTML = title;
+                if(window.innerWidth <= 768) UISystem.toggleSidebar();
+            },
+            formatDate: (timestamp) => {
+                if(!timestamp) return 'N/A';
+                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                return date.toLocaleDateString('en-IN', options);
+            }
+        };
+
+        document.addEventListener('click', (e) => {
+            if(window.innerWidth <= 768 && document.getElementById('dashboard-wrapper').classList.contains('sidebar-active')) {
+                if(!document.getElementById('sidebar').contains(e.target) && !e.target.closest('.menu-toggle')) {
+                    UISystem.toggleSidebar();
+                }
+            }
+        });
+
+        // ==========================================
+        // AUTHENTICATION SYSTEM
+        // ==========================================
+        const AuthSystem = {
+            currentCaptcha: '',
+            isManualLogin: false, 
+
+            init: () => {
+                AuthSystem.generateCaptcha();
+                document.getElementById('loginForm').addEventListener('submit', AuthSystem.handleLogin);
+                
+                window.addEventListener('firebase-ready', () => {
+                    window.fbOnAuth(window.fbAuth, (user) => {
+                        if (user) {
+                            document.getElementById('currentUserLabel').innerText = user.email.split('@')[0].toUpperCase();
+                            if (!AuthSystem.isManualLogin && !document.getElementById('login-overlay').classList.contains('hidden')) {
+                                AuthSystem.showDashboard();
+                            }
+                        } else {
+                            AuthSystem.showLogin();
+                        }
+                    });
+                });
+            },
+            generateCaptcha: () => {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+                let result = '';
+                for (let i = 0; i < 6; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
+                AuthSystem.currentCaptcha = result;
+                document.getElementById('captchaDisplay').innerText = result;
+            },
+            handleLogin: async (e) => {
+                e.preventDefault();
+                AuthSystem.isManualLogin = true; 
+                document.querySelectorAll('.form-group').forEach(g => g.classList.remove('error'));
+                document.querySelectorAll('.error-msg').forEach(m => m.style.display = 'none');
+
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                const captcha = document.getElementById('captchaInput').value;
+                const btn = document.getElementById('loginBtn');
+
+                if (captcha !== AuthSystem.currentCaptcha) {
+                    const group = document.getElementById('captchaGroup');
+                    group.classList.add('error'); group.querySelector('.error-msg').style.display = 'block';
+                    AuthSystem.generateCaptcha(); document.getElementById('captchaInput').value = '';
+                    AuthSystem.isManualLogin = false;
+                    return;
+                }
+
+                btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+
+                try {
+                    await window.fbSignIn(window.fbAuth, email, password);
+                    NotificationSystem.show('Secure Login Successful. Redirecting...', 'success');
+                    setTimeout(() => { AuthSystem.showDashboard(); }, 1800);
+                } catch (error) {
+                    NotificationSystem.show('Access Denied. Invalid Credentials.', 'error');
+                    AuthSystem.generateCaptcha(); document.getElementById('captchaInput').value = '';
+                    AuthSystem.isManualLogin = false;
+                } finally {
+                    btn.disabled = false; btn.innerHTML = 'Authorize Login';
+                }
+            },
+            logout: async () => {
+                await window.fbSignOut(window.fbAuth);
+                NotificationSystem.show('Secure session terminated.', 'info');
+                AuthSystem.isManualLogin = false;
+            },
+            showDashboard: () => {
+                const overlay = document.getElementById('login-overlay');
+                overlay.classList.add('fade-out');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('fade-out'); 
+                    document.getElementById('dashboard-wrapper').classList.remove('hidden');
+                    document.getElementById('dashboard-wrapper').classList.add('fade-in');
+                    DataSystem.initDashboard();
+                }, 600); 
+            },
+            showLogin: () => {
+                document.getElementById('dashboard-wrapper').classList.add('hidden');
+                document.getElementById('dashboard-wrapper').classList.remove('fade-in');
+                document.getElementById('login-overlay').classList.remove('hidden', 'fade-out');
+                document.getElementById('loginForm').reset();
+                AuthSystem.generateCaptcha();
+            }
+        };
+
+        // ==========================================
+        // DATA MANAGEMENT SYSTEM (ORIGINAL)
+        // ==========================================
+        const DataSystem = {
+            currentCollection: '',
+            currentStatus: '',
+            
+            initDashboard: () => {
+                document.querySelectorAll('#mainMenu a').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        document.querySelectorAll('#mainMenu a').forEach(a => a.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        
+                        const target = e.currentTarget.getAttribute('data-target');
+                        const status = e.currentTarget.getAttribute('data-status');
+                        const title = e.currentTarget.innerText.trim();
+                        
+                        if(target === 'dashboardHome') {
+                            UISystem.switchView('dashboardHome', 'Dashboard Overview');
+                            DataSystem.loadStats();
+                        } 
+                        // ADDED: Logic for new systems routing
+                        else if (target === 'spotlightManager') {
+                            UISystem.switchView('spotlightSection', title);
+                            SpotlightManager.loadSpotlights();
+                        } else if (target === 'courseManager') {
+                            UISystem.switchView('coursesSection', title);
+                            LearningManager.loadCourses();
+                        } else if (target === 'leaderboardManager') {
+                            UISystem.switchView('leaderboardSection', title);
+                            LearningManager.loadLeaderboard();
+                        }
+                        // Original tables routing
+                        else if(target) {
+                            DataSystem.loadData(target, status, title);
+                        }
+                    });
+                });
+                DataSystem.loadStats(); 
+            },
+
+            loadStats: async () => {
+                try {
+                    const tPending = await window.fbGetDocs(window.fbQuery(window.fbCollection(window.fbDb, "thoughts"), window.fbWhere("status", "==", "pending")));
+                    const tApprove = await window.fbGetDocs(window.fbQuery(window.fbCollection(window.fbDb, "thoughts"), window.fbWhere("status", "==", "approved")));
+                    const cPending = await window.fbGetDocs(window.fbQuery(window.fbCollection(window.fbDb, "contact_to_ceo"), window.fbWhere("status", "==", "pending")));
+                    const tSched = await window.fbGetDocs(window.fbQuery(window.fbCollection(window.fbDb, "thoughts"), window.fbWhere("status", "==", "scheduled")));
+                    const cSched = await window.fbGetDocs(window.fbQuery(window.fbCollection(window.fbDb, "contact_to_ceo"), window.fbWhere("status", "==", "scheduled")));
+
+                    document.getElementById('statPendingThoughts').innerText = tPending.size;
+                    document.getElementById('statApprovedThoughts').innerText = tApprove.size;
+                    document.getElementById('statPendingContacts').innerText = cPending.size;
+                    document.getElementById('statScheduled').innerText = tSched.size + cSched.size;
+                } catch (err) { console.error("Error loading stats", err); }
+            },
+
+            loadCurrentView: () => {
+                if(DataSystem.currentCollection && DataSystem.currentStatus) {
+                    const title = document.getElementById('tableTitle').innerText;
+                    DataSystem.loadData(DataSystem.currentCollection, DataSystem.currentStatus, title);
+                }
+            },
+
+            loadData: async (collectionName, status, titleText) => {
+                DataSystem.currentCollection = collectionName;
+                DataSystem.currentStatus = status;
+                UISystem.switchView('dataTableSection', titleText);
+                document.getElementById('tableTitle').innerText = titleText;
+                
+                const tHead = document.getElementById('tableHead');
+                const tBody = document.getElementById('tableBody');
+                tBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px;"><i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color: var(--navy-primary)"></i><br><br>Fetching Official Data...</td></tr>`;
+
+                if(collectionName === 'thoughts') {
+                    tHead.innerHTML = `<tr><th>App ID</th><th>Date Submitted</th><th>Citizen Name</th><th>State/UT</th><th>Idea Title</th><th>Status</th><th>Official Actions</th></tr>`;
+                } else {
+                    tHead.innerHTML = `<tr><th>App ID</th><th>Date Submitted</th><th>Citizen Name</th><th>District</th><th>Subject Matter</th><th>Status</th><th>Official Actions</th></tr>`;
+                }
+
+                try {
+                    const q = window.fbQuery(window.fbCollection(window.fbDb, collectionName), window.fbWhere("status", "==", status));
+                    const querySnapshot = await window.fbGetDocs(q);
+                    
+                    tBody.innerHTML = '';
+                    if (querySnapshot.empty) {
+                        tBody.innerHTML = `<tr><td colspan="7" class="empty-state">No records found for '${status}' status.</td></tr>`;
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const tr = document.createElement('tr');
+                        const dateStr = UISystem.formatDate(data.created_at);
+                        const badgeClass = status; 
+                        
+                        let cols = '';
+                        if(collectionName === 'thoughts') {
+                            cols = `
+                                <td><strong style="color: var(--navy-primary);">${data.application_id || 'N/A'}</strong></td>
+                                <td><i class="fa-regular fa-calendar" style="color: var(--text-muted); margin-right:5px;"></i> ${dateStr}</td>
+                                <td><strong>${data.name || 'Anonymous Citizen'}</strong></td>
+                                <td>${data.state || 'N/A'}</td>
+                                <td>${(data.problem_title || '').substring(0,35)}...</td>
+                            `;
+                        } else {
+                            cols = `
+                                <td><strong style="color: var(--navy-primary);">${data.application_id || 'N/A'}</strong></td>
+                                <td><i class="fa-regular fa-calendar" style="color: var(--text-muted); margin-right:5px;"></i> ${dateStr}</td>
+                                <td><strong>${data.name || 'Citizen'}</strong></td>
+                                <td>${data.district || 'N/A'}</td>
+                                <td>${(data.problem_title || 'Contact Request').substring(0,30)}...</td>
+                            `;
+                        }
+
+                        let actionsHtml = `<button class="action-btn" onclick="DataSystem.openViewModal('${collectionName}', '${doc.id}')" title="View Full Details"><i class="fa-solid fa-eye"></i> View</button>`;
+                        if(status === 'pending' || status === 'scheduled') {
+                            actionsHtml += `
+                                <button class="action-btn verify" onclick="DataSystem.prepAction('verifyModal', '${collectionName}', '${doc.id}')" title="Approve Entry"><i class="fa-solid fa-check"></i></button>
+                                <button class="action-btn reject" onclick="DataSystem.prepAction('rejectModal', '${collectionName}', '${doc.id}')" title="Reject Entry"><i class="fa-solid fa-xmark"></i></button>
+                            `;
+                        }
+                        actionsHtml += `<button class="action-btn schedule" onclick="DataSystem.prepAction('scheduleModal', '${collectionName}', '${doc.id}')" title="Schedule Action"><i class="fa-solid fa-calendar-plus"></i></button>`;
+
+                        tr.innerHTML = `${cols}<td><span class="badge ${badgeClass}">${status.toUpperCase()}</span></td><td class="actions-cell">${actionsHtml}</td>`;
+                        tBody.appendChild(tr);
+                    });
+                } catch (err) { tBody.innerHTML = `<tr><td colspan="7" class="empty-state" style="color:var(--danger)">Database Access Error.</td></tr>`; }
+            },
+
+            openViewModal: async (collectionName, docId) => {
+                UISystem.openModal('viewModal');
+                const content = document.getElementById('viewModalContent');
+                content.innerHTML = `<div style="text-align:center; padding: 40px;"><i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color: var(--navy-primary)"></i></div>`;
+                
+                try {
+                    const docSnap = await window.fbGetDoc(window.fbDoc(window.fbDb, collectionName, docId));
+                    if (docSnap.exists()) {
+                        const d = docSnap.data();
+                        let html = `
+                            <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 15px;">
+                                <div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase;">Application ID</span><div style="font-size: 22px; font-weight: 700; color: var(--navy-primary); letter-spacing: 1px;">${d.application_id || 'N/A'}</div></div>
+                                <div style="text-align: right;"><span class="badge ${d.status}">${(d.status || 'Pending').toUpperCase()}</span></div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; background: #F8FAFC; padding: 25px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                        `;
+                        
+                        html += `<div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block; margin-bottom: 4px;">Citizen Name</span><strong style="font-size: 15px;">${d.name || 'N/A'}</strong></div>`;
+                        html += `<div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block; margin-bottom: 4px;">Date Submitted</span><strong style="font-size: 15px;">${UISystem.formatDate(d.created_at)}</strong></div>`;
+                        html += `<div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block; margin-bottom: 4px;">State / UT</span><strong style="font-size: 15px;">${d.state || 'N/A'}</strong></div>`;
+                        html += `<div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block; margin-bottom: 4px;">Mobile Number</span><strong style="font-size: 15px;">${d.mobile || 'N/A'}</strong></div>`;
+                        
+                        if(collectionName === 'thoughts') {
+                            html += `<div style="grid-column: span 2; margin-top:5px; border-top: 1px solid var(--border-subtle); padding-top: 15px;"><span style="color:var(--saffron); font-size:12px; font-weight: 700; text-transform: uppercase; display:block;">Problem Title</span><h4 style="margin-top:8px; color:var(--navy-primary); font-size: 18px;">${d.problem_title || 'N/A'}</h4></div>`;
+                            html += `<div style="grid-column: span 2;"><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block;">Problem Description</span><p style="background:var(--white); padding:15px; border:1px solid var(--border-subtle); border-radius:6px; margin-top:8px; line-height: 1.6; white-space: pre-wrap;">${d.problem_description || 'N/A'}</p></div>`;
+                            html += `<div style="grid-column: span 2;"><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block;">Impact in India</span><p style="background:var(--white); padding:15px; border:1px solid var(--border-subtle); border-radius:6px; margin-top:8px; line-height: 1.6; white-space: pre-wrap;">${d.impact || 'N/A'}</p></div>`;
+                            html += `<div style="grid-column: span 2;"><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block;">Proposed Solution</span><p style="background:var(--white); padding:15px; border:1px solid var(--border-subtle); border-radius:6px; margin-top:8px; line-height: 1.6; white-space: pre-wrap;">${d.solution || 'N/A'}</p></div>`;
+                            if(d.additional_note) html += `<div style="grid-column: span 2;"><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block;">Additional Note</span><p style="background:var(--white); padding:15px; border:1px solid var(--border-subtle); border-radius:6px; margin-top:8px; line-height: 1.6; white-space: pre-wrap;">${d.additional_note}</p></div>`;
+                        } else {
+                            html += `<div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block; margin-bottom: 4px;">District</span><strong style="font-size: 15px;">${d.district || 'N/A'}</strong></div>`;
+                            html += `<div><span style="color:var(--text-muted); font-size:12px; font-weight: 600; text-transform: uppercase; display:block; margin-bottom: 4px;">Complete Address</span><strong style="font-size: 15px;">${d.address || 'N/A'}</strong></div>`;
+                            html += `<div style="grid-column: span 2; margin-top:5px; border-top: 1px solid var(--border-subtle); padding-top: 15px;"><span style="color:var(--saffron); font-size:12px; font-weight: 700; text-transform: uppercase; display:block;">Message to CEO</span><p style="background:var(--white); padding:15px; border:1px solid var(--border-subtle); border-radius:6px; margin-top:8px; line-height: 1.6; white-space: pre-wrap; font-size: 15px; color: var(--navy-primary);">${d.message || d.problem_description || 'N/A'}</p></div>`;
+                        }
+
+                        if(d.rejection_note) html += `<div style="grid-column: span 2; margin-top:10px;"><span style="color:var(--danger); font-size:12px; font-weight: 700; text-transform: uppercase; display:block;">Official Rejection Note</span><p style="background:#FEF2F2; color:#B91C1C; padding:15px; border-radius:6px; border: 1px solid #FECACA; margin-top:8px;">${d.rejection_note}</p></div>`;
+                        if(d.scheduled_at) html += `<div style="grid-column: span 2; margin-top:10px;"><span style="color:var(--accent-blue); font-size:12px; font-weight: 700; text-transform: uppercase; display:block;">Scheduled Action Date</span><p style="background:#EFF6FF; color:#1D4ED8; padding:15px; border-radius:6px; border: 1px solid #BFDBFE; margin-top:8px;"><i class="fa-regular fa-clock"></i> ${UISystem.formatDate(d.scheduled_at)}</p></div>`;
+
+                        html += `</div>`;
+                        content.innerHTML = html;
+                    } else { content.innerHTML = `<div style="color:var(--danger); text-align: center; padding: 20px;">Record securely archived or not found.</div>`; }
+                } catch (err) { content.innerHTML = `<div style="color:var(--danger); text-align: center; padding: 20px;">Secure Database Access Error.</div>`; }
+            },
+
+            prepAction: (modalId, collectionType, docId) => {
+                let prefix = modalId === 'verifyModal' ? 'approve' : (modalId === 'rejectModal' ? 'reject' : 'schedule');
+                document.getElementById(`${prefix}DocId`).value = docId;
+                document.getElementById(`${prefix}DocType`).value = collectionType;
+                UISystem.openModal(modalId);
+            },
+
+            executeAction: async (newStatus) => {
+                let prefix = newStatus === 'approved' ? 'approve' : (newStatus === 'rejected' ? 'reject' : 'schedule');
+                const docId = document.getElementById(`${prefix}DocId`).value;
+                const collectionName = document.getElementById(`${prefix}DocType`).value;
+                let updatePayload = { status: newStatus, reviewed_at: new Date().toISOString() };
+
+                if(newStatus === 'rejected') {
+                    const note = document.getElementById('rejectReason').value;
+                    if(!note.trim()) { NotificationSystem.show('Rejection reason is mandatory', 'warning'); return; }
+                    updatePayload.rejection_note = note; 
+                }
+                
+                if(newStatus === 'scheduled') {
+                    const dateVal = document.getElementById('scheduleDate').value;
+                    if(!dateVal) { NotificationSystem.show('Select future date/time', 'warning'); return; }
+                    updatePayload.scheduled_at = dateVal; 
+                }
+
+                try {
+                    await window.fbUpdateDoc(window.fbDoc(window.fbDb, collectionName, docId), updatePayload);
+                    NotificationSystem.show(`Record Updated: ${newStatus.toUpperCase()}`, 'success');
+                    UISystem.closeModals();
+                    DataSystem.loadCurrentView(); 
+                    DataSystem.loadStats(); 
+                } catch (err) { NotificationSystem.show(`Update Failed`, 'error'); }
+            }
+        };
+
+        // ==========================================
+        // ADDED: NATIONAL SPOTLIGHT MANAGER
+        // ==========================================
+        const SpotlightManager = {
+            loadSpotlights: async () => {
+                const tbody = document.getElementById('spotlightTableBody');
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></td></tr>`;
+                try {
+                    const q = window.fbQuery(window.fbCollection(window.fbDb, "spotlight"), window.fbOrderBy("created_at", "desc"));
+                    const snap = await window.fbGetDocs(q);
+                    tbody.innerHTML = '';
+                    if(snap.empty) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No Spotlights found.</td></tr>`; return; }
+                    
+                    snap.forEach(doc => {
+                        const d = doc.data();
+                        const catClass = (d.category || '').toLowerCase();
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${UISystem.formatDate(d.created_at)}</td>
+                                <td><strong>${d.headline}</strong></td>
+                                <td><span class="badge ${catClass}">${d.category.toUpperCase()}</span></td>
+                                <td>${d.edited_by}</td>
+                                <td><span class="badge published">PUBLISHED</span></td>
+                            </tr>
+                        `;
+                    });
+                } catch(e) { console.error(e); tbody.innerHTML = `<tr><td colspan="5" class="empty-state">Error Loading Data</td></tr>`; }
+            },
+            saveSpotlight: async (e) => {
+                e.preventDefault();
+                const payload = {
+                    headline: document.getElementById('spHeadline').value,
+                    edited_by: document.getElementById('spEditor').value,
+                    category: document.getElementById('spCategory').value,
+                    summary: document.getElementById('spSummary').value,
+                    content: document.getElementById('spContent').value,
+                    featured_image: document.getElementById('spImage').value || null,
+                    status: 'published',
+                    created_at: new Date().toISOString()
+                };
+                try {
+                    await window.fbAddDoc(window.fbCollection(window.fbDb, "spotlight"), payload);
+                    NotificationSystem.show('National Spotlight Published Successfully', 'success');
+                    UISystem.closeModals();
+                    SpotlightManager.loadSpotlights();
+                } catch(err) { NotificationSystem.show('Error saving spotlight', 'error'); }
+            }
+        };
+
+        // ==========================================
+        // ADDED: LEARNING & LEADERBOARD MANAGER
+        // ==========================================
+        const LearningManager = {
+            currentCourseId: null,
+            currentCourseTitle: '',
+            currentLbCategory: 'daily',
+
+            loadCourses: async () => {
+                const tbody = document.getElementById('coursesTableBody');
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></td></tr>`;
+                try {
+                    const snap = await window.fbGetDocs(window.fbCollection(window.fbDb, "courses"));
+                    tbody.innerHTML = '';
+                    if(snap.empty) { tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No Courses found.</td></tr>`; return; }
+                    
+                    snap.forEach(doc => {
+                        const d = doc.data();
+                        const badgeClass = d.status === 'completed' ? 'completed' : 'ongoing';
+                        let actionsHtml = `<button class="action-btn" onclick="LearningManager.openManageLectures('${doc.id}', '${d.course_title}')"><i class="fa-solid fa-list"></i> Lectures</button>`;
+                        if(d.status !== 'completed') {
+                            actionsHtml += `<button class="action-btn reject" onclick="LearningManager.endCourse('${doc.id}')"><i class="fa-solid fa-power-off"></i> End</button>`;
+                        }
+                        
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${UISystem.formatDate(d.created_at)}</td>
+                                <td><strong>${d.course_title}</strong></td>
+                                <td>${d.master_name}</td>
+                                <td>${d.duration_days} Days</td>
+                                <td><span class="badge ${badgeClass}">${(d.status || 'ongoing').toUpperCase()}</span></td>
+                                <td class="actions-cell">${actionsHtml}</td>
+                            </tr>
+                        `;
+                    });
+                } catch(e) { console.error(e); tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Error Loading Data</td></tr>`; }
+            },
+            saveCourse: async (e) => {
+                e.preventDefault();
+                const payload = {
+                    course_title: document.getElementById('cTitle').value,
+                    master_name: document.getElementById('cMaster').value,
+                    duration_days: document.getElementById('cDuration').value,
+                    course_description: document.getElementById('cDesc').value,
+                    status: document.getElementById('cStatus').value,
+                    created_at: new Date().toISOString()
+                };
+                try {
+                    await window.fbAddDoc(window.fbCollection(window.fbDb, "courses"), payload);
+                    NotificationSystem.show('Course Added Successfully', 'success');
+                    UISystem.closeModals();
+                    LearningManager.loadCourses();
+                } catch(err) { NotificationSystem.show('Error saving course', 'error'); }
+            },
+            endCourse: async (id) => {
+                if(confirm("End this course? It will move to Previous Courses.")) {
+                    try {
+                        await window.fbUpdateDoc(window.fbDoc(window.fbDb, "courses", id), { status: 'completed' });
+                        NotificationSystem.show('Course Marked as Completed', 'success');
+                        LearningManager.loadCourses();
+                    } catch(e) { NotificationSystem.show('Update failed', 'error'); }
+                }
+            },
+            openManageLectures: async (courseId, courseTitle) => {
+                LearningManager.currentCourseId = courseId;
+                LearningManager.currentCourseTitle = courseTitle;
+                document.getElementById('mlCourseTitle').innerText = courseTitle;
+                UISystem.openModal('manageLecturesModal');
+                
+                const tbody = document.getElementById('lecturesTableBody');
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading...</td></tr>`;
+                try {
+                    const q = window.fbQuery(window.fbCollection(window.fbDb, "lectures"), window.fbWhere("course_id", "==", courseId));
+                    const snap = await window.fbGetDocs(q);
+                    tbody.innerHTML = '';
+                    if(snap.empty) { tbody.innerHTML = `<tr><td colspan="4" class="empty-state">No Lectures added yet.</td></tr>`; return; }
+                    
+                    let lectures = [];
+                    snap.forEach(doc => lectures.push(doc.data()));
+                    lectures.sort((a,b) => a.lecture_number - b.lecture_number);
+                    
+                    lectures.forEach(l => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><strong>${l.lecture_number}</strong></td>
+                                <td>${l.lecture_theme}</td>
+                                <td>${l.lecture_title}</td>
+                                <td>${UISystem.formatDate(l.created_at)}</td>
+                            </tr>
+                        `;
+                    });
+                } catch(e) { tbody.innerHTML = `<tr><td colspan="4">Error loading lectures</td></tr>`; }
+            },
+            openAddLectureModal: () => {
+                // Open add lecture directly over the manage list (closing manage list feels cleaner)
+                UISystem.closeModals();
+                UISystem.openModal('addLectureModal');
+            },
+            saveLecture: async (e) => {
+                e.preventDefault();
+                if(!LearningManager.currentCourseId) { NotificationSystem.show('System Error: No course selected', 'error'); return; }
+                const payload = {
+                    course_id: LearningManager.currentCourseId,
+                    lecture_number: parseInt(document.getElementById('lNumber').value),
+                    lecture_theme: document.getElementById('lTheme').value,
+                    lecture_title: document.getElementById('lTitle').value,
+                    lecture_content: document.getElementById('lContent').value,
+                    lecture_questions: document.getElementById('lQuestions').value,
+                    created_at: new Date().toISOString()
+                };
+                try {
+                    await window.fbAddDoc(window.fbCollection(window.fbDb, "lectures"), payload);
+                    NotificationSystem.show('Lecture Added Successfully', 'success');
+                    // Return back to lecture management list
+                    UISystem.closeModals();
+                    LearningManager.openManageLectures(LearningManager.currentCourseId, LearningManager.currentCourseTitle);
+                } catch(err) { NotificationSystem.show('Error saving lecture', 'error'); }
+            },
+            
+            // LEADERBOARD LOGIC
+            setLbFilter: (cat, btnElement) => {
+                document.querySelectorAll('.filter-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+                LearningManager.currentLbCategory = cat;
+                document.getElementById('lbSectionTitle').innerText = `Leaderboard - ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+                LearningManager.loadLeaderboard();
+            },
+            loadLeaderboard: async () => {
+                const tbody = document.getElementById('leaderboardTableBody');
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></td></tr>`;
+                try {
+                    const q = window.fbQuery(window.fbCollection(window.fbDb, "leaderboard"), window.fbWhere("category", "==", LearningManager.currentLbCategory), window.fbOrderBy("score", "desc"));
+                    const snap = await window.fbGetDocs(q);
+                    tbody.innerHTML = '';
+                    if(snap.empty) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No entries for ${LearningManager.currentLbCategory}.</td></tr>`; return; }
+                    
+                    let rank = 1;
+                    snap.forEach(doc => {
+                        const d = doc.data();
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><strong>#${rank}</strong></td>
+                                <td><strong>${d.name}</strong></td>
+                                <td><span style="color:var(--navy-primary); font-weight:700;">${d.score} pts</span></td>
+                                <td><span class="badge completed">${d.category.toUpperCase()}</span></td>
+                                <td>${UISystem.formatDate(d.created_at)}</td>
+                            </tr>
+                        `;
+                        rank++;
+                    });
+                } catch(e) { console.error(e); tbody.innerHTML = `<tr><td colspan="5" class="empty-state">Error Loading Data</td></tr>`; }
+            },
+            saveLeaderboard: async (e) => {
+                e.preventDefault();
+                const payload = {
+                    name: document.getElementById('lbName').value,
+                    score: parseFloat(document.getElementById('lbScore').value),
+                    category: document.getElementById('lbCategory').value,
+                    created_at: new Date().toISOString()
+                };
+                try {
+                    await window.fbAddDoc(window.fbCollection(window.fbDb, "leaderboard"), payload);
+                    NotificationSystem.show('Leaderboard Entry Added', 'success');
+                    UISystem.closeModals();
+                    // If added to current viewing category, reload
+                    if(LearningManager.currentLbCategory === payload.category) {
+                        LearningManager.loadLeaderboard();
+                    }
+                } catch(err) { NotificationSystem.show('Error saving entry', 'error'); }
+            }
+        };
+
+        window.onload = () => { AuthSystem.init(); };
+
+    </script>
+</body>
+</html>
