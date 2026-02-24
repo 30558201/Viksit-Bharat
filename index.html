@@ -1,1 +1,246 @@
-hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viksit Bharat | National Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --saffron: #FF9933; --white: #FFFFFF; --green: #138808;
+            --navy-primary: #0A192F; --navy-light: #172A45;
+            --text-main: #1E293B; --text-muted: #64748B;
+            --border-subtle: #E2E8F0; --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--text-main); background: #fff; overflow-x: hidden; font-size: 14px; }
+
+        /* =========================================================
+           1. TRICOLOR PRELOADER (2 SECONDS)
+           ========================================================= */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--navy-primary); z-index: 99999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .loader-logo { width: 60px; height: 60px; margin-bottom: 20px; animation: pulse 1s infinite; }
+        .loader-bar-container { width: 200px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .loader-bar { width: 0; height: 100%; background: linear-gradient(to right, var(--saffron), var(--white), var(--green)); animation: loading 2s forwards; }
+        
+        @keyframes loading { to { width: 100%; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
+
+        /* =========================================================
+           2. BREATHING LOGO & ROTATING CHAKRA
+           ========================================================= */
+        .brand-logo { 
+            width: 35px; height: 35px; border-radius: 50%; padding: 2px; background: #fff;
+            animation: breatheLogo 4s infinite ease-in-out;
+        }
+        @keyframes breatheLogo {
+            0%, 100% { box-shadow: 0 0 5px var(--saffron); transform: scale(1); }
+            33% { box-shadow: 0 0 15px var(--white); transform: scale(1.05); }
+            66% { box-shadow: 0 0 5px var(--green); transform: scale(1); }
+        }
+
+        .chakra-bg {
+            position: fixed; top: 50%; left: 50%; width: 70vh; height: 70vh;
+            transform: translate(-50%, -50%); opacity: 0.04; z-index: -1;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="none" stroke="%230A192F" stroke-width="1"/><circle cx="50" cy="50" r="8" fill="none" stroke="%230A192F" stroke-width="1"/><g stroke="%230A192F" stroke-width="0.5">${Array.from({length:24},(_,i)=>`<line x1="50" y1="50" x2="${50+46*Math.cos(i*Math.PI/12)}" y2="${50+46*Math.sin(i*Math.PI/12)}"/>`).join('')}</g></svg>') no-repeat center/contain;
+            animation: rotateChakra 60s linear infinite;
+        }
+        @keyframes rotateChakra { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* =========================================================
+           NAVIGATION & UI
+           ========================================================= */
+        .navbar {
+            position: fixed; top: 0; width: 100%; padding: 12px 5%;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+        .navbar.scrolled { background: rgba(255,255,255,0.98); box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-top: 3px solid var(--saffron); }
+
+        .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .brand-text { font-family: 'Merriweather', serif; font-size: 16px; font-weight: 900; color: var(--navy-primary); }
+        
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-cta { background: var(--navy-primary); color: #fff !important; padding: 8px 16px; border-radius: 4px; font-size: 10px; }
+
+        .mobile-toggle { display: none; background: none; border: none; font-size: 20px; color: var(--navy-primary); }
+
+        /* HERO - SMALLER TYPOGRAPHY */
+        .hero { min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
+        .hero-title { font-family: 'Merriweather', serif; font-size: 38px; color: var(--navy-primary); margin-bottom: 15px; line-height: 1.2; }
+        .hero-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 30px; max-width: 500px; margin-inline: auto; }
+        
+        .btn-hero { background: var(--navy-primary); color: #fff; padding: 12px 24px; font-size: 13px; font-weight: 700; text-decoration: none; border-radius: 4px; transition: 0.3s; }
+
+        /* SECTIONS */
+        .section { padding: 60px 5%; }
+        .section-title { font-family: 'Merriweather', serif; font-size: 24px; text-align: center; margin-bottom: 30px; color: var(--navy-primary); }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #fff; padding: 20px; border: 1px solid var(--border-subtle); border-radius: 4px; transition: 0.3s; }
+        .card:hover { border-color: var(--saffron); transform: translateY(-5px); }
+        .card i { font-size: 20px; color: var(--saffron); margin-bottom: 10px; }
+        .card h4 { font-family: 'Merriweather', serif; font-size: 16px; margin-bottom: 8px; }
+        .card p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+        .stat-card { text-align: center; border-top: 3px solid var(--navy-primary); }
+        .stat-val { font-size: 28px; font-weight: 900; font-family: 'Merriweather', serif; color: var(--navy-primary); }
+        .stat-lab { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+
+        /* MOBILE MENU SCROLLABLE */
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 75%; height: 100vh;
+                background: #fff; flex-direction: column; padding: 70px 25px;
+                overflow-y: auto; transition: 0.4s ease; box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+                align-items: flex-start;
+            }
+            .nav-links.open { right: 0; }
+            .nav-links a { width: 100%; padding: 12px 0; border-bottom: 1px solid #f8fafc; font-size: 12px; }
+            .hero-title { font-size: 28px; }
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .footer { background: var(--navy-primary); color: #fff; padding: 40px 5% 20px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <i class="fa-solid fa-building-columns loader-logo" style="color:var(--saffron); font-size: 40px;"></i>
+        <div class="loader-bar-container"><div class="loader-bar"></div></div>
+        <p style="color:#fff; font-size: 10px; margin-top: 10px; letter-spacing: 2px;">VIKSIT BHARAT BY VEXA</p>
+    </div>
+
+    <div class="chakra-bg"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="brand">
+            <img src="https://lh3.googleusercontent.com/pw/AP1GczPLQl0gLFCsgck1QzP7XaC6K3W6AP7u-PD55uAMKcX7OB0TTmqli9_OMiURrXzzFM4VkA6-e0G83bdUhwGBBwkmpQlMnogFp9RrVhqEAo9bsm8gk7oN1pQ2wlnPFNVe-phI4Fxic1hlUuZGS0ELGbQ=w632-h649-s-no-gm?authuser=0" class="brand-logo" alt="Logo">
+            <span class="brand-text">Viksit Bharat</span>
+        </a>
+        <button class="mobile-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="spotlight.html">Spotlight</a>
+            <a href="public_thoughts.html">Voices</a>
+            <a href="learning.html">Learning</a>
+            <a href="track_application.html">Track</a>
+            <a href="submit.html" class="btn-cta">Submit Thought</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Empowering Citizens.<br>Strengthening India.</h1>
+            <p class="hero-subtitle">The official national gateway for structured civic dialogue, transparent feedback, and policy awareness.</p>
+            <a href="submit.html" class="btn-hero">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+        <div class="grid" style="grid-template-columns: repeat(4, 1fr);" id="statsGrid">
+            <div class="card stat-card"><div class="stat-val">...</div><div class="stat-lab">Total Submissions</div></div>
+            <div class="card stat-card" style="border-top-color:var(--green)"><div class="stat-val">...</div><div class="stat-lab">Verified Ideas</div></div>
+            <div class="card stat-card" style="border-top-color:var(--saffron)"><div class="stat-val">...</div><div class="stat-lab">Spotlight News</div></div>
+            <div class="card stat-card"><div class="stat-val">1.2k</div><div class="stat-lab">Active Learners</div></div>
+        </div>
+    </section>
+
+    <section class="section" style="background: #f8fafc66;">
+        <h2 class="section-title">Core Framework</h2>
+        <div class="grid">
+            <div class="card"><i class="fa-solid fa-lightbulb"></i><h4>Voices of Nation</h4><p>Structured public layer where verified citizen proposals are published for national visibility.</p></div>
+            <div class="card"><i class="fa-solid fa-newspaper"></i><h4>National Spotlight</h4><p>Direct official channel broadcasting verified news and institutional announcements.</p></div>
+            <div class="card"><i class="fa-solid fa-graduation-cap"></i><h4>Civic Learning</h4><p>Expert modules on governance awareness coupled with a national leaderboard.</p></div>
+            <div class="card"><i class="fa-solid fa-envelope-open-text"></i><h4>Direct Contact</h4><p>Secure portal for critical communications directly to executive administration.</p></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Latest Spotlight</h2>
+        <div class="grid" id="spotlightGrid"></div>
+        <div style="text-align:center; margin-top:30px;"><a href="spotlight.html" class="nav-links" style="font-size:11px; color:var(--navy-primary);">View All Spotlight <i class="fa-solid fa-chevron-right"></i></a></div>
+    </section>
+
+    <footer class="footer">
+        <div style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+            <div><h4>Viksit Bharat</h4><p style="color:#94A3B8; margin-top:5px;">Digital Infrastructure for Civic Empowerment.</p></div>
+            <div style="display:flex; gap:30px;">
+                <div><a href="learning.html" style="color:#94A3B8; text-decoration:none;">Learning</a></div>
+                <div><a href="public_thoughts.html" style="color:#94A3B8; text-decoration:none;">Public Thoughts</a></div>
+                <div><a href="track_application.html" style="color:#94A3B8; text-decoration:none;">Tracking</a></div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:30px; color:#64748B; font-size:10px;">© 2026 Viksit Bharat by VEXA Enterprise.</div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdJ6FtbZFkaH4f-BOQPSy7Ar0s9E9-xbI",
+            authDomain: "viksit-bharat-7b31b.firebaseapp.com",
+            projectId: "viksit-bharat-7b31b"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Preloader Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('preloader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 2000);
+        });
+
+        // Load Live Data
+        async function loadData() {
+            try {
+                const tSnap = await getDocs(collection(db, "thoughts"));
+                const sSnap = await getDocs(collection(db, "spotlight"));
+                const approved = Array.from(tSnap.docs).filter(d => d.data().status === 'approved').length;
+                
+                document.getElementById('statsGrid').innerHTML = `
+                    <div class="card stat-card"><div class="stat-val">${tSnap.size}</div><div class="stat-lab">Total Thoughts</div></div>
+                    <div class="card stat-card" style="border-top-color:var(--green)"><div class="stat-val">${approved}</div><div class="stat-lab">Verified Ideas</div></div>
+                    <div class="card stat-card" style="border-top-color:var(--saffron)"><div class="stat-val">${sSnap.size}</div><div class="stat-lab">Official News</div></div>
+                    <div class="card stat-card"><div class="stat-val">1,240</div><div class="stat-lab">Active Learners</div></div>
+                `;
+
+                const q = query(collection(db, "spotlight"), where("status", "==", "published"), orderBy("created_at", "desc"), limit(3));
+                const snap = await getDocs(q);
+                const spGrid = document.getElementById('spotlightGrid');
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    spGrid.innerHTML += `
+                        <div class="card">
+                            <span style="font-size:9px; font-weight:900; color:var(--saffron); text-transform:uppercase;">${d.category}</span>
+                            <h4>${d.headline}</h4>
+                            <p>${d.summary.substring(0,80)}...</p>
+                        </div>
+                    `;
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        window.toggleMenu = () => document.getElementById('navLinks').classList.toggle('open');
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            window.scrollY > 50 ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
