@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Learning Initiative | Viksit Bharat by VEXA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================================
+           INSTITUTIONAL EDUCATIONAL DESIGN SYSTEM (REFINED)
+           ========================================================= */
+        :root {
+            --navy-primary: #0A192F;
+            --navy-light: #172A45;
+            --white: #FFFFFF;
+            --bg-body: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --grey-border: #E2E8F0;
+            --grey-text: #64748B;
+            --text-main: #1E293B;
+            
+            --accent-gold: #D4AF37;
+            --badge-ongoing: #1E3A8A; 
+            --badge-ongoing-bg: #EFF6FF;
+            --badge-completed: #15803D;
+            --badge-completed-bg: #F0FDF4;
+
+            --saffron: #FF9933;
+            --green: #138808;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+            padding-top: 65px; 
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle Indian watermark pattern */
+        .bg-texture {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm20 20h20v20H20V20z' fill='%230a192f' fill-opacity='0.015'/%3E%3C/svg%3E");
+        }
+        
+        .hidden { display: none !important; }
+
+        /* TRICOLOR INSTITUTIONAL STRIP */
+        .tricolor-strip {
+            height: 3px; width: 100%; position: fixed; top: 0; left: 0; z-index: 1001;
+            background: linear-gradient(to right, var(--saffron), var(--white), var(--green));
+        }
+        
+        /* HEADER SYSTEM */
+        .header {
+            position: fixed; top: 3px; left: 0; width: 100%; height: 60px;
+            background: rgba(255, 255, 255, 0.98); border-bottom: 1px solid var(--grey-border);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; z-index: 1000; box-shadow: var(--shadow-sm);
+        }
+        .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .brand img { height: 35px; width: 35px; border-radius: 50%; border: 1px solid var(--grey-border); padding: 2px; }
+        .brand-text { font-family: 'Merriweather', serif; font-size: 16px; font-weight: 900; color: var(--navy-primary); }
+        
+        .menu-toggle { background: none; border: none; font-size: 20px; color: var(--navy-primary); cursor: pointer; transition: var(--transition); }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+            background: var(--white); box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            transition: 0.4s ease-in-out; z-index: 1050; padding: 80px 30px 30px;
+            display: flex; flex-direction: column; align-items: flex-start;
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu button {
+            width: 100%; text-align: left; padding: 15px 0; background: none;
+            border: none; border-bottom: 1px solid var(--bg-body); font-size: 14px; 
+            font-weight: 600; color: var(--navy-primary); cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .close-menu { position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--navy-primary); background: none; border: none; }
+
+        /* SPA VIEW CONTAINERS */
+        .view-section { animation: fadeIn 0.4s ease; flex: 1; display: flex; flex-direction: column; width: 100%; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================================
+           HERO SECTION
+           ========================================================= */
+        .hero-section { text-align: center; padding: 50px 5% 30px; max-width: 800px; margin: 0 auto; }
+        .hero-title { font-size: 36px; font-family: 'Merriweather', serif; color: var(--navy-primary); font-weight: 900; margin-bottom: 12px; line-height: 1.2; }
+        .hero-subtitle { font-size: 14px; color: var(--grey-text); line-height: 1.6; margin-bottom: 30px; max-width: 600px; margin-inline: auto; }
+        
+        .action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .btn-primary {
+            background: var(--navy-primary); color: var(--white); padding: 12px 28px;
+            border: none; border-radius: 4px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: var(--transition); 
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary:hover { background: var(--navy-light); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-primary.active { background: var(--saffron); color: var(--white); }
+
+        /* =========================================================
+           LEARN NOW SECTION (COURSES)
+           ========================================================= */
+        .content-container { max-width: 1100px; margin: 0 auto 50px; padding: 0 5%; width: 100%; }
+        
+        .section-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--grey-border); padding-bottom: 12px; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; }
+        .section-title { font-size: 20px; font-family: 'Merriweather', serif; color: var(--navy-primary); font-weight: 700; }
+        
+        .course-tabs { display: flex; gap: 15px; }
+        .course-tab { background: none; border: none; font-size: 13px; font-weight: 600; color: var(--grey-text); cursor: pointer; padding-bottom: 12px; margin-bottom: -14px; border-bottom: 2px solid transparent; transition: var(--transition); }
+        .course-tab.active { color: var(--navy-primary); border-bottom-color: var(--navy-primary); }
+
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .course-card {
+            background: var(--bg-card); border: 1px solid var(--grey-border); border-radius: 6px; padding: 20px;
+            cursor: pointer; transition: var(--transition); display: flex; flex-direction: column;
+        }
+        .course-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--saffron); }
+        
+        .card-author { font-size: 10px; font-weight: 700; color: var(--saffron); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .card-title { font-size: 16px; font-family: 'Merriweather', serif; color: var(--navy-primary); margin-bottom: 12px; line-height: 1.4; font-weight: 700; }
+        .card-duration { font-size: 12px; color: var(--grey-text); display: flex; align-items: center; gap: 6px; margin-bottom: 20px; }
+        
+        .card-footer { display: flex; justify-content: flex-end; margin-top: auto; border-top: 1px solid var(--bg-body); padding-top: 12px; }
+        
+        .badge { padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge.ongoing { background: var(--badge-ongoing-bg); color: var(--badge-ongoing); border: 1px solid rgba(30, 58, 138, 0.2); }
+        .badge.completed { background: var(--badge-completed-bg); color: var(--badge-completed); border: 1px solid rgba(21, 128, 61, 0.2); }
+
+        /* =========================================================
+           COURSE DETAIL VIEW
+           ========================================================= */
+        .course-detail-header { background: var(--white); border: 1px solid var(--grey-border); border-radius: 6px; padding: 30px 20px; margin-bottom: 24px; text-align: center; }
+        .detail-title { font-size: 24px; font-family: 'Merriweather', serif; color: var(--navy-primary); margin-bottom: 12px; font-weight: 900; }
+        .detail-meta { display: flex; justify-content: center; gap: 20px; color: var(--grey-text); font-size: 13px; font-weight: 500; flex-wrap: wrap; }
+        .detail-desc { margin-top: 15px; color: var(--grey-text); font-size: 14px; max-width: 600px; margin-inline: auto; }
+
+        .lectures-list { background: var(--white); border: 1px solid var(--grey-border); border-radius: 6px; overflow: hidden; }
+        .lecture-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--bg-body); cursor: pointer; transition: var(--transition); }
+        .lecture-item:hover { background: var(--bg-body); padding-left: 25px; }
+        
+        .lec-info { display: flex; align-items: center; gap: 12px; }
+        .lec-num { font-size: 12px; font-weight: 700; color: var(--navy-primary); background: var(--badge-ongoing-bg); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .lec-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
+
+        /* =========================================================
+           LECTURE CONTENT VIEW
+           ========================================================= */
+        .lecture-container { background: var(--white); border: 1px solid var(--grey-border); border-radius: 6px; padding: 30px 20px; }
+        .lec-view-theme { font-size: 12px; color: var(--saffron); text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+        .lec-view-title { font-size: 22px; font-family: 'Merriweather', serif; color: var(--navy-primary); margin-bottom: 20px; font-weight: 800; padding-bottom: 15px; border-bottom: 1px solid var(--grey-border); }
+        
+        .lec-body { font-size: 15px; line-height: 1.8; color: #334155; margin-bottom: 30px; white-space: pre-wrap; }
+        
+        .assessment-section { background: #F8FAFC; border: 1px solid var(--grey-border); border-left: 3px solid var(--saffron); padding: 20px; border-radius: 4px; }
+        .assessment-title { font-size: 16px; font-family: 'Merriweather', serif; color: var(--navy-primary); margin-bottom: 12px; font-weight: 700; }
+        .assessment-q { font-size: 14px; color: var(--text-main); margin-bottom: 10px; padding-left: 15px; position: relative; }
+        .assessment-q::before { content: 'Q.'; position: absolute; left: 0; font-weight: 700; color: var(--saffron); }
+        
+        .submission-note { margin-top: 15px; font-size: 12px; color: var(--grey-text); font-style: italic; }
+
+        /* =========================================================
+           LEADERBOARD SECTION
+           ========================================================= */
+        .leaderboard-filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .lb-btn {
+            background: var(--white); border: 1px solid var(--grey-border); color: var(--grey-text);
+            padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .lb-btn.active { background: var(--navy-primary); color: var(--white); border-color: var(--navy-primary); }
+
+        .top-3-podium { display: flex; justify-content: center; align-items: flex-end; gap: 15px; margin-bottom: 30px; padding-top: 20px; }
+        .podium-card { background: var(--white); border: 1px solid var(--grey-border); border-radius: 6px; padding: 20px; text-align: center; width: 180px; position: relative; }
+        .podium-card.rank-1 { width: 200px; border-color: var(--accent-gold); z-index: 2; transform: translateY(-10px); border-top: 3px solid var(--accent-gold); }
+        .podium-card.rank-2, .podium-card.rank-3 { border-top: 3px solid var(--navy-light); }
+        
+        .podium-avatar { width: 60px; height: 60px; background: var(--bg-body); border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--grey-text); border: 1px solid var(--grey-border); }
+        .rank-1 .podium-avatar { width: 75px; height: 75px; border-color: var(--accent-gold); font-size: 24px; }
+        
+        .crown-icon { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 24px; }
+        .rank-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--navy-primary); color: var(--white); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
+        
+        .podium-name { font-size: 14px; font-weight: 700; color: var(--navy-primary); margin-bottom: 2px; }
+        .podium-score { font-size: 12px; font-weight: 600; color: var(--grey-text); }
+        .rank-1 .podium-score { color: var(--accent-gold); }
+
+        .lb-list { background: var(--white); border: 1px solid var(--grey-border); border-radius: 6px; }
+        .lb-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--bg-body); }
+        .lb-row:last-child { border-bottom: none; }
+        .row-rank { font-size: 14px; font-weight: 700; color: var(--grey-text); width: 35px; }
+        .row-avatar { width: 32px; height: 32px; background: var(--bg-body); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 12px; border: 1px solid var(--grey-border); }
+        .row-name { font-size: 13px; font-weight: 600; flex: 1; }
+        .row-score { font-size: 13px; font-weight: 700; color: var(--navy-primary); }
+
+        .sub-top-bar { margin-bottom: 20px; }
+        .btn-back { background: none; border: none; font-size: 13px; font-weight: 600; color: var(--navy-primary); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+        .loader-container { text-align: center; padding: 40px 0; color: var(--navy-primary); font-size: 14px; }
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--grey-text); font-size: 14px; border: 1px dashed var(--grey-border); border-radius: 6px; background: var(--white); }
+
+        /* =========================================================
+           MOBILE OPTIMIZATIONS
+           ========================================================= */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 28px; }
+            .btn-primary { width: 100%; justify-content: center; }
+            .action-buttons { flex-direction: column; width: 100%; }
+            
+            .course-grid { grid-template-columns: 1fr; }
+            .detail-title { font-size: 20px; }
+            
+            .top-3-podium { flex-direction: column; align-items: center; padding-top: 20px; }
+            .podium-card, .podium-card.rank-1 { width: 100%; max-width: 300px; transform: none !important; margin-bottom: 15px; }
+            .crown-icon, .rank-badge { top: -12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-texture"></div>
+    <div class="tricolor-strip"></div>
+
+    <header class="header">
+        <a href="index.html" class="brand">
+            <img src="https://lh3.googleusercontent.com/pw/AP1GczPLQl0gLFCsgck1QzP7XaC6K3W6AP7u-PD55uAMKcX7OB0TTmqli9_OMiURrXzzFM4VkA6-e0G83bdUhwGBBwkmpQlMnogFp9RrVhqEAo9bsm8gk7oN1pQ2wlnPFNVe-phI4Fxic1hlUuZGS0ELGbQ=w632-h649-s-no-gm?authuser=0" alt="Logo" onerror="this.style.display='none'">
+            <span class="brand-text">Viksit Bharat</span>
+        </a>
+        <button class="menu-toggle" onclick="UI.toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" onclick="UI.toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i> Return to Home</button>
+        <button onclick="window.location.href='spotlight.html'"><i class="fa-solid fa-newspaper"></i> National Spotlight</button>
+        <button onclick="window.location.href='public_thoughts.html'"><i class="fa-solid fa-users"></i> Public Thoughts</button>
+    </div>
+
+    <div class="hero-section" id="heroSection">
+        <h1 class="hero-title">Learn. Compete. Lead.</h1>
+        <p class="hero-subtitle">Structured national learning modules curated to strengthen civic understanding and policy awareness.</p>
+        
+        <div class="action-buttons">
+            <button class="btn-primary active" id="btnLearnNav" onclick="UI.switchMainTab('learnView')"><i class="fa-solid fa-book-open"></i> Learn Now</button>
+            <button class="btn-primary" id="btnLeadNav" onclick="UI.switchMainTab('leadView')"><i class="fa-solid fa-trophy"></i> Leaderboard</button>
+        </div>
+    </div>
+
+    <main id="learnView" class="view-section active">
+        <div class="content-container">
+            <div class="section-header">
+                <h2 class="section-title">Knowledge Modules</h2>
+                <div class="course-tabs">
+                    <button class="course-tab active" id="tabOngoing" onclick="Logic.setCourseFilter('ongoing')">Active</button>
+                    <button class="course-tab" id="tabCompleted" onclick="Logic.setCourseFilter('completed')">Previous</button>
+                </div>
+            </div>
+
+            <div id="loaderCourse" class="loader-container">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Retrieving official modules...
+            </div>
+            
+            <div id="courseGrid" class="course-grid"></div>
+            
+            <div id="emptyCourse" class="empty-state hidden">
+                <i class="fa-solid fa-book" style="font-size: 24px; margin-bottom: 10px; color: #cbd5e1;"></i><br>
+                No modules available currently.
+            </div>
+        </div>
+    </main>
+
+    <main id="courseDetailView" class="view-section hidden">
+        <div class="content-container">
+            <div class="sub-top-bar">
+                <button class="btn-back" onclick="UI.goBackToCourses()"><i class="fa-solid fa-arrow-left"></i> All Modules</button>
+            </div>
+
+            <div class="course-detail-header">
+                <h1 class="detail-title" id="cdTitle">Course Title</h1>
+                <div class="detail-meta">
+                    <span id="cdAuthor"><i class="fa-solid fa-user-tie"></i> Master</span>
+                    <span id="cdDuration"><i class="fa-solid fa-clock"></i> Duration</span>
+                </div>
+                <p class="detail-desc" id="cdDesc">Description.</p>
+            </div>
+
+            <h3 style="font-family: 'Merriweather', serif; color: var(--navy-primary); font-size: 16px; margin-bottom: 12px;">Curriculum</h3>
+            
+            <div id="loaderLectures" class="loader-container hidden">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading lectures...
+            </div>
+
+            <div class="lectures-list" id="lecturesList"></div>
+            
+            <div id="emptyLectures" class="empty-state hidden" style="padding: 30px;">
+                Lectures are being prepared for this module.
+            </div>
+        </div>
+    </main>
+
+    <main id="lectureView" class="view-section hidden">
+        <div class="content-container">
+            <div class="sub-top-bar">
+                <button class="btn-back" onclick="UI.goBackToCourseDetail()"><i class="fa-solid fa-arrow-left"></i> Back to Curriculum</button>
+            </div>
+
+            <div class="lecture-container">
+                <div id="lvTheme" class="lec-view-theme">Theme</div>
+                <h1 id="lvTitle" class="lec-view-title">Lecture Title</h1>
+                
+                <div id="lvContent" class="lec-body">Content</div>
+
+                <div class="assessment-section" id="lvAssessmentBox">
+                    <h3 class="assessment-title">Assessment Questions</h3>
+                    <div id="lvQuestions"></div>
+                    <div class="submission-note">
+                        Submit answers via registered email: <strong style="color:var(--navy-primary);">submissions@viksitbharat.in</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="leadView" class="view-section hidden">
+        <div class="content-container">
+            <div class="section-header" style="justify-content: center; border-bottom: none; margin-bottom: 10px;">
+                <h2 class="section-title">National Leaderboard</h2>
+            </div>
+            <p style="text-align: center; color: var(--grey-text); font-size: 13px; margin-bottom: 24px;">Top performers evaluated based on institutional assessments.</p>
+
+            <div class="leaderboard-filters">
+                <button class="lb-btn active" onclick="Logic.setLbFilter('daily', this)">Daily</button>
+                <button class="lb-btn" onclick="Logic.setLbFilter('weekly', this)">Weekly</button>
+                <button class="lb-btn" onclick="Logic.setLbFilter('monthly', this)">Monthly</button>
+                <button class="lb-btn" onclick="Logic.setLbFilter('alltime', this)">All Time</button>
+            </div>
+
+            <div id="loaderLb" class="loader-container">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Calculating rankings...
+            </div>
+
+            <div id="lbContent" class="hidden">
+                <div class="top-3-podium" id="lbPodium">
+                    <div class="podium-card rank-2" id="rank2Card">
+                        <div class="rank-badge">2</div>
+                        <div class="podium-avatar"><i class="fa-solid fa-user"></i></div>
+                        <div class="podium-name" id="r2Name">-</div>
+                        <div class="podium-score" id="r2Score">0 pts</div>
+                    </div>
+                    
+                    <div class="podium-card rank-1" id="rank1Card">
+                        <i class="fa-solid fa-crown crown-icon"></i>
+                        <div class="podium-avatar"><i class="fa-solid fa-user"></i></div>
+                        <div class="podium-name" id="r1Name">-</div>
+                        <div class="podium-score" id="r1Score">0 pts</div>
+                    </div>
+                    
+                    <div class="podium-card rank-3" id="rank3Card">
+                        <div class="rank-badge">3</div>
+                        <div class="podium-avatar"><i class="fa-solid fa-user"></i></div>
+                        <div class="podium-name" id="r3Name">-</div>
+                        <div class="podium-score" id="r3Score">0 pts</div>
+                    </div>
+                </div>
+
+                <div class="lb-list" id="lbList"></div>
+            </div>
+
+            <div id="emptyLb" class="empty-state hidden">
+                <i class="fa-solid fa-trophy" style="font-size: 24px; margin-bottom: 10px; color: #cbd5e1;"></i><br>
+                Rankings are being processed for this category.
+            </div>
+        </div>
+    </main>
+
+    <footer style="background: var(--white); border-top: 1px solid var(--grey-border); padding: 20px; text-align: center; margin-top: auto;">
+        <div style="font-size: 11px; color: #94A3B8;">
+            © 2026 Viksit Bharat by VEXA. Managed via Admin Dashboard.
+        </div>
+    </footer>
+
+    <script type="module">
+        // Firebase Configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdJ6FtbZFkaH4f-BOQPSy7Ar0s9E9-xbI",
+            authDomain: "viksit-bharat-7b31b.firebaseapp.com",
+            projectId: "viksit-bharat-7b31b"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // STATE
+        const State = {
+            allCourses: [],
+            courseFilter: 'ongoing',
+            currentCourseId: null,
+            lbFilter: 'daily'
+        };
+
+        // UI NAVIGATION
+        const UI = {
+            toggleMenu: () => document.getElementById('mobileMenu').classList.toggle('active'),
+            
+            switchMainTab: (tabId) => {
+                document.getElementById('learnView').classList.add('hidden');
+                document.getElementById('leadView').classList.add('hidden');
+                document.getElementById('courseDetailView').classList.add('hidden');
+                document.getElementById('lectureView').classList.add('hidden');
+                
+                document.getElementById('btnLearnNav').classList.remove('active');
+                document.getElementById('btnLeadNav').classList.remove('active');
+                
+                document.getElementById(tabId).classList.remove('hidden');
+                if(tabId === 'learnView') document.getElementById('btnLearnNav').classList.add('active');
+                if(tabId === 'leadView') {
+                    document.getElementById('btnLeadNav').classList.add('active');
+                    Logic.loadLeaderboard();
+                }
+            },
+            
+            goBackToCourses: () => {
+                document.getElementById('courseDetailView').classList.add('hidden');
+                document.getElementById('learnView').classList.remove('hidden');
+                document.getElementById('heroSection').style.display = 'block';
+                window.scrollTo(0, 0);
+            },
+            
+            goBackToCourseDetail: () => {
+                document.getElementById('lectureView').classList.add('hidden');
+                document.getElementById('courseDetailView').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+        };
+
+        // BUSINESS LOGIC
+        const Logic = {
+            init: async () => {
+                document.getElementById('loaderCourse').classList.remove('hidden');
+                try {
+                    const q = query(collection(db, "courses"));
+                    const snap = await getDocs(q);
+                    let data = [];
+                    snap.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
+                    State.allCourses = data;
+                    Logic.renderCourses();
+                } catch (e) {
+                    console.error(e);
+                    document.getElementById('emptyCourse').classList.remove('hidden');
+                } finally {
+                    document.getElementById('loaderCourse').classList.add('hidden');
+                }
+            },
+
+            setCourseFilter: (status) => {
+                State.courseFilter = status;
+                document.getElementById('tabOngoing').classList.toggle('active', status === 'ongoing');
+                document.getElementById('tabCompleted').classList.toggle('active', status === 'completed');
+                Logic.renderCourses();
+            },
+
+            renderCourses: () => {
+                const grid = document.getElementById('courseGrid');
+                grid.innerHTML = '';
+                const filtered = State.allCourses.filter(c => c.status === State.courseFilter);
+                
+                if(filtered.length === 0) {
+                    document.getElementById('emptyCourse').classList.remove('hidden');
+                } else {
+                    document.getElementById('emptyCourse').classList.add('hidden');
+                    filtered.forEach(course => {
+                        const card = document.createElement('div');
+                        card.className = 'course-card';
+                        card.onclick = () => Logic.openCourseDetail(course);
+                        
+                        const badgeClass = course.status === 'completed' ? 'completed' : 'ongoing';
+                        const badgeText = course.status === 'completed' ? 'Completed' : 'Ongoing';
+
+                        card.innerHTML = `
+                            <div class="card-author">By Master: ${course.master_name || 'VEXA'}</div>
+                            <h2 class="card-title">${course.course_title || 'Untitled Module'}</h2>
+                            <div class="card-duration"><i class="fa-solid fa-clock"></i> ${course.duration_days || 0} Days Curriculum</div>
+                            <div class="card-footer">
+                                <span class="badge ${badgeClass}">${badgeText}</span>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                }
+            },
+
+            // FIXED: Removed orderBy from Firebase Query. Doing local sorting to prevent index errors.
+            openCourseDetail: async (course) => {
+                State.currentCourseId = course.id;
+                
+                document.getElementById('heroSection').style.display = 'none';
+                document.getElementById('learnView').classList.add('hidden');
+                document.getElementById('courseDetailView').classList.remove('hidden');
+                window.scrollTo(0, 0);
+
+                document.getElementById('cdTitle').textContent = course.course_title;
+                document.getElementById('cdAuthor').innerHTML = `<i class="fa-solid fa-user-tie"></i> By ${course.master_name}`;
+                document.getElementById('cdDuration').innerHTML = `<i class="fa-solid fa-clock"></i> ${course.duration_days} Days`;
+                document.getElementById('cdDesc').textContent = course.course_description || 'Structured knowledge module.';
+
+                document.getElementById('loaderLectures').classList.remove('hidden');
+                document.getElementById('lecturesList').innerHTML = '';
+                document.getElementById('emptyLectures').classList.add('hidden');
+
+                try {
+                    // FIX APPLIED HERE: Only filtering by course_id, no complex index required.
+                    const q = query(collection(db, "lectures"), where("course_id", "==", course.id));
+                    const snap = await getDocs(q);
+                    
+                    if(snap.empty) {
+                        document.getElementById('emptyLectures').classList.remove('hidden');
+                    } else {
+                        // FIX APPLIED HERE: Local sorting by lecture_number
+                        let lectures = [];
+                        snap.forEach(doc => lectures.push(doc.data()));
+                        lectures.sort((a, b) => a.lecture_number - b.lecture_number);
+
+                        lectures.forEach(l => {
+                            const item = document.createElement('div');
+                            item.className = 'lecture-item';
+                            item.onclick = () => Logic.openLecture(l);
+                            item.innerHTML = `
+                                <div class="lec-info">
+                                    <div class="lec-num">${l.lecture_number}</div>
+                                    <div class="lec-title">Lecture ${l.lecture_number} – ${l.lecture_title}</div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right" style="color:var(--grey-text); font-size:12px;"></i>
+                            `;
+                            document.getElementById('lecturesList').appendChild(item);
+                        });
+                    }
+                } catch(e) {
+                    console.error("Fetch Error:", e);
+                    document.getElementById('emptyLectures').textContent = "Error loading curriculum.";
+                    document.getElementById('emptyLectures').classList.remove('hidden');
+                } finally {
+                    document.getElementById('loaderLectures').classList.add('hidden');
+                }
+            },
+
+            openLecture: (l) => {
+                document.getElementById('courseDetailView').classList.add('hidden');
+                document.getElementById('lectureView').classList.remove('hidden');
+                window.scrollTo(0, 0);
+
+                document.getElementById('lvTheme').textContent = `Theme: ${l.lecture_theme || 'General'}`;
+                document.getElementById('lvTitle').textContent = `Lecture ${l.lecture_number}: ${l.lecture_title}`;
+                document.getElementById('lvContent').textContent = l.lecture_content || 'Content unavailable.';
+
+                const qBox = document.getElementById('lvQuestions');
+                qBox.innerHTML = '';
+                
+                if(l.lecture_questions && l.lecture_questions.trim() !== "") {
+                    const qs = l.lecture_questions.split('\n').filter(q => q.trim() !== "");
+                    qs.forEach(q => {
+                        const div = document.createElement('div');
+                        div.className = 'assessment-q';
+                        div.textContent = q;
+                        qBox.appendChild(div);
+                    });
+                    document.getElementById('lvAssessmentBox').classList.remove('hidden');
+                } else {
+                    document.getElementById('lvAssessmentBox').classList.add('hidden');
+                }
+            },
+
+            setLbFilter: (cat, btn) => {
+                document.querySelectorAll('.lb-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                State.lbFilter = cat;
+                Logic.loadLeaderboard();
+            },
+
+            loadLeaderboard: async () => {
+                document.getElementById('lbContent').classList.add('hidden');
+                document.getElementById('emptyLb').classList.add('hidden');
+                document.getElementById('loaderLb').classList.remove('hidden');
+
+                try {
+                    const q = query(collection(db, "leaderboard"), where("category", "==", State.lbFilter), orderBy("score", "desc"), limit(50));
+                    const snap = await getDocs(q);
+                    
+                    if(snap.empty) {
+                        document.getElementById('emptyLb').classList.remove('hidden');
+                    } else {
+                        let data = [];
+                        snap.forEach(doc => data.push(doc.data()));
+                        Logic.renderLeaderboard(data);
+                        document.getElementById('lbContent').classList.remove('hidden');
+                    }
+                } catch(e) {
+                    console.error(e);
+                    document.getElementById('emptyLb').classList.remove('hidden');
+                } finally {
+                    document.getElementById('loaderLb').classList.add('hidden');
+                }
+            },
+
+            renderLeaderboard: (data) => {
+                document.getElementById('r1Name').textContent = '-'; document.getElementById('r1Score').textContent = '0 pts';
+                document.getElementById('r2Name').textContent = '-'; document.getElementById('r2Score').textContent = '0 pts';
+                document.getElementById('r3Name').textContent = '-'; document.getElementById('r3Score').textContent = '0 pts';
+                
+                if(data[0]) { document.getElementById('r1Name').textContent = data[0].name; document.getElementById('r1Score').textContent = data[0].score + ' pts'; }
+                if(data[1]) { document.getElementById('r2Name').textContent = data[1].name; document.getElementById('r2Score').textContent = data[1].score + ' pts'; }
+                if(data[2]) { document.getElementById('r3Name').textContent = data[2].name; document.getElementById('r3Score').textContent = data[2].score + ' pts'; }
+
+                const list = document.getElementById('lbList');
+                list.innerHTML = '';
+                
+                for(let i = 3; i < data.length; i++) {
+                    const row = document.createElement('div');
+                    row.className = 'lb-row';
+                    row.innerHTML = `
+                        <div class="row-rank">#${i + 1}</div>
+                        <div class="row-avatar"><i class="fa-solid fa-user"></i></div>
+                        <div class="row-name">${data[i].name}</div>
+                        <div class="row-score">${data[i].score} pts</div>
+                    `;
+                    list.appendChild(row);
+                }
+            }
+        };
+
+        window.UI = UI;
+        window.Logic = Logic;
+        window.addEventListener('DOMContentLoaded', Logic.init);
+    </script>
+</body>
+</html>
