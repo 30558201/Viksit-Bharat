@@ -53,6 +53,7 @@
             --accent-blue: #3b82f6;
             --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.5);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5);
+            --gradient-indian: linear-gradient(135deg, rgba(255,153,51,0.05), rgba(10,25,47,0.8), rgba(19,136,8,0.05));
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
@@ -110,27 +111,83 @@
 
         /* MAIN CONTAINER & CARDS */
         .main-container { max-width: 800px; margin: 40px auto; padding: 0 20px; position: relative; z-index: 10; }
-        .page-title { font-size: 28px; font-weight: 800; color: var(--navy-primary); margin-bottom: 32px; text-align: center; letter-spacing: -0.5px; animation: slideUpReveal 0.6s ease forwards; opacity: 0; }
+        .page-title { font-size: 28px; font-weight: 800; color: var(--navy-primary); margin-bottom: 32px; text-align: center; letter-spacing: -0.5px; animation: slideUpReveal 0.6s ease forwards; opacity: 0; display: none; /* UPGRADE: Hidden as per instructions to replace visually */ }
 
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
         @media (max-width: 600px) { .action-grid { grid-template-columns: 1fr; } }
         
+        /* UPGRADE: Structural Enhancement for Central Cards */
         .action-card {
             background: var(--white); border: 1px solid var(--grey-border);
-            border-radius: var(--radius-lg); padding: 40px 24px; text-align: center;
+            border-radius: var(--radius-lg); padding: 32px 24px; text-align: left; /* Changed from center */
             cursor: pointer; transition: var(--transition-smooth); box-shadow: var(--shadow-sm);
             position: relative; overflow: hidden; animation: slideUpReveal 0.8s ease forwards; opacity: 0;
+            display: flex; flex-direction: column; align-items: flex-start;
         }
         
-        /* UPGRADE: Card hover elevation & shadow transition */
-        .action-card:hover { border-color: var(--accent-blue); box-shadow: var(--shadow-lg); transform: translateY(-8px); }
+        .action-card:hover { border-color: var(--accent-blue); box-shadow: var(--shadow-lg); transform: translateY(-6px); }
         .action-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-indian); transform: scaleX(0); transition: transform 0.4s ease; transform-origin: left; }
         .action-card:hover::before { transform: scaleX(1); }
         
-        /* UPGRADE: Icon micro-interaction */
-        .action-card i { font-size: 38px; color: var(--navy-primary); margin-bottom: 16px; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .action-card:hover i { transform: scale(1.15) rotate(8deg); color: var(--accent-blue); }
-        .action-card h3 { font-size: 20px; font-weight: 700; color: var(--text-main); }
+        .action-card i.main-icon { 
+            font-size: 32px; color: var(--navy-primary); margin-bottom: 20px; 
+            background: var(--bg-body); padding: 16px; border-radius: 50%;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, color 0.3s ease; 
+        }
+        .action-card:hover i.main-icon { transform: scale(1.1) rotate(5deg); color: var(--white); background: var(--accent-blue); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
+        
+        /* Override original generic h3 styling */
+        .action-card h3 { display: none; } /* Hide original generic text */
+        
+        .card-content-upgrade { width: 100%; position: relative; }
+        .card-content-upgrade h4 { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; transition: color 0.3s ease; }
+        .action-card:hover .card-content-upgrade h4 { color: var(--accent-blue); }
+        .card-content-upgrade p { font-size: 13px; color: var(--grey-text); line-height: 1.5; margin-bottom: 0; }
+        .card-arrow { position: absolute; bottom: 0; right: 0; font-size: 16px; color: var(--grey-text); opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
+        .action-card:hover .card-arrow { opacity: 1; transform: translateX(0); color: var(--accent-blue); }
+
+        /* UPGRADE: Professional Title Section */
+        .premium-title-section {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: slideUpReveal 0.7s ease forwards;
+            opacity: 0;
+            position: relative;
+        }
+        .premium-title-section h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--navy-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        .premium-title-section h1::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--saffron), var(--white), var(--india-green));
+            border-radius: 2px;
+        }
+        .premium-title-section p {
+            font-size: 15px;
+            color: var(--grey-text);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        @media (max-width: 600px) {
+            .premium-title-section h1 { font-size: 26px; }
+            .premium-title-section p { font-size: 14px; padding: 0 10px; }
+            .premium-title-section { margin-bottom: 32px; }
+        }
 
         /* FORMS SYSTEM */
         /* UPGRADE: Overlay smooth fade transition */
@@ -322,6 +379,70 @@
         .header-actions { display: flex; align-items: center; gap: 15px; }
         .theme-toggle { background: var(--bg-body); border: 1px solid var(--grey-border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-main); transition: var(--transition); }
         .theme-toggle:hover { transform: rotate(15deg); }
+
+        /* =========================================================
+           UPGRADE: TOP POSITIONING & MOBILE APP-LIKE CARDS
+           ========================================================= */
+        .main-container {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        #actionGrid {
+            order: -10 !important; /* Moves cards strictly to the top */
+            margin-top: 10px !important;
+            margin-bottom: 30px !important;
+            position: relative;
+            z-index: 20;
+        }
+        
+        /* Make buttons highlighted and visually obvious */
+        .action-card {
+            border: 2px solid rgba(37,99,235,0.2) !important;
+            background: linear-gradient(145deg, var(--white), var(--bg-body)) !important;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.1) !important;
+            animation: slideUpReveal 0.8s ease forwards, subtleHighlight 3s infinite alternate !important;
+        }
+        
+        @keyframes subtleHighlight {
+            0% { box-shadow: 0 4px 15px rgba(37,99,235,0.05); }
+            100% { box-shadow: 0 8px 25px rgba(37,99,235,0.15); border-color: rgba(37,99,235,0.3); }
+        }
+        
+        /* Perfect Mobile Fit - Compact App-like Style */
+        @media (max-width: 600px) {
+            #actionGrid {
+                gap: 12px !important;
+                margin-bottom: 24px !important;
+            }
+            .action-card {
+                padding: 16px !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 14px !important;
+                border-radius: 10px !important;
+            }
+            .action-card i.main-icon {
+                font-size: 20px !important;
+                padding: 10px !important;
+                margin-bottom: 0 !important;
+                flex-shrink: 0;
+                background: rgba(37,99,235,0.1) !important;
+                color: var(--accent-blue) !important;
+            }
+            .card-content-upgrade h4 {
+                font-size: 15px !important;
+                margin-bottom: 2px !important;
+            }
+            .card-content-upgrade p {
+                font-size: 11px !important;
+                line-height: 1.3 !important;
+                color: var(--grey-text) !important;
+            }
+            .card-arrow {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -373,16 +494,28 @@
             </div>
         </section>
 
-        <h1 class="page-title" id="pageTitle">Submit Your Thoughts</h1>
+        <h1 class="page-title" id="pageTitle">Submit Your Thoughts</h1> <div class="premium-title-section" id="premiumTitleBox">
+            <h1>Empowering India 2047</h1>
+            <p>A structured civic platform enabling citizens to contribute ideas, raise concerns, and track their participation in India’s development journey toward 2047.</p>
+        </div>
         
         <div class="action-grid" id="actionGrid">
             <div class="action-card ripple" onclick="UI.showSection('writeSection')" role="button" aria-label="Write to Us Section">
-                <i class="fa-solid fa-pen-to-square"></i>
-                <h3>Write to Us</h3>
+                <i class="fa-solid fa-pen-to-square main-icon"></i>
+                <h3>Write to Us</h3> <div class="card-content-upgrade">
+                    <h4>Submit Your Thought</h4>
+                    <p>Share your insights, ideas, or policy suggestions that can contribute toward a stronger and more developed India.</p>
+                    <i class="fa-solid fa-arrow-right card-arrow"></i>
+                </div>
             </div>
+            
             <div class="action-card ripple" onclick="UI.showSection('statusSection')" role="button" aria-label="Check Status Section">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <h3>Check Status</h3>
+                <i class="fa-solid fa-magnifying-glass main-icon"></i>
+                <h3>Check Status</h3> <div class="card-content-upgrade">
+                    <h4>Track Your Submission</h4>
+                    <p>Monitor the review status of your submitted thought using your Application ID in a transparent and structured process.</p>
+                    <i class="fa-solid fa-arrow-right card-arrow"></i>
+                </div>
             </div>
         </div>
 
@@ -601,7 +734,7 @@
             Your voice is the architect of tomorrow. By submitting your thoughts, you are actively participating in shaping a developed, prosperous, and empowered India. Together, we are writing the future.
         </p>
         <div class="footer-bottom">
-            <span>&copy; 2026 Viksit Bharat by VEXA</span>
+            <span>© 2026 Viksit Bharat by VEXA</span>
             <span style="opacity: 0.5;">|</span>
             <span>Empowering Citizens</span>
             <span style="opacity: 0.5;">|</span>
@@ -636,6 +769,8 @@
             goHome: () => {
                 document.getElementById('mobileMenu').classList.remove('active');
                 document.getElementById('actionGrid').classList.remove('hidden');
+                // UPGRADE: Restore Title Box
+                document.getElementById('premiumTitleBox').classList.remove('hidden');
                 document.getElementById('writeSection').classList.add('hidden');
                 document.getElementById('statusSection').classList.add('hidden');
                 document.getElementById('pageTitle').innerText = "Submit Your Thoughts";
@@ -647,6 +782,11 @@
             },
             showSection: (sectionId) => {
                 document.getElementById('actionGrid').classList.add('hidden');
+                // UPGRADE: Hide Title Box
+                document.getElementById('premiumTitleBox').classList.add('hidden');
+                document.getElementById('writeSection').classList.add('hidden'); // Fix to ensure clean state
+                document.getElementById('statusSection').classList.add('hidden'); // Fix to ensure clean state
+                
                 document.getElementById(sectionId).classList.remove('hidden');
                 document.getElementById('pageTitle').innerText = sectionId === 'writeSection' ? "Write to Us" : "Track Application";
                 
