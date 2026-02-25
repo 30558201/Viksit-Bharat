@@ -230,9 +230,339 @@
             .podium-card, .podium-card.rank-1 { width: 100%; max-width: 300px; transform: none !important; margin-bottom: 15px; }
             .crown-icon, .rank-badge { top: -12px; }
         }
+
+        /* =========================================================
+           STRICT NON-DESTRUCTIVE ENTERPRISE UPGRADES
+           ========================================================= */
+        
+        /* 1. Background Upgrade */
+        .bg-texture {
+            background-image: none !important;
+            background: radial-gradient(circle at top right, rgba(10, 25, 47, 0.05), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(19, 136, 8, 0.03), transparent 60%),
+                        var(--bg-body) !important;
+        }
+
+        /* OVERRIDE: Remove the old large revolving Ashoka Chakra without deleting its code */
+        .bg-texture::after {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            animation: none !important;
+        }
+        
+        /* NEW: Tricolor Illumination Background */
+        .tricolor-illumination {
+            position: fixed;
+            top: -20%; left: -20%;
+            width: 140%; height: 140%;
+            z-index: -4;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, transparent 70%),
+                        linear-gradient(135deg, rgba(255, 153, 51, 0.07) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.02) 60%, rgba(19, 136, 8, 0.07) 100%);
+            animation: illuminationBreath 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes illuminationBreath {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.03) translate(-1%, -1%); }
+        }
+
+        /* NEW: Professional Waving Flag Watermark with Small Rotating Chakra */
+        .waving-flag-watermark {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 90vmin; height: 60vmin;
+            max-width: 700px; max-height: 450px;
+            transform: translate(-50%, -50%);
+            z-index: -3;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            opacity: 0.08; /* Extremely elegant, subtle watermark */
+            filter: blur(0.5px);
+            transform-origin: center center;
+            animation: flagWaveMotion 7s cubic-bezier(0.36, 0, 0.64, 1) infinite alternate;
+            -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+
+        @keyframes flagWaveMotion {
+            0% { transform: translate(-50%, -50%) perspective(1200px) rotateY(12deg) rotateX(4deg) skewY(-2deg) scale(1); }
+            100% { transform: translate(-50%, -50%) perspective(1200px) rotateY(-12deg) rotateX(-4deg) skewY(2deg) scale(1.02); }
+        }
+
+        .w-band {
+            flex: 1;
+            width: 120%;
+            position: relative;
+            left: -10%;
+            border-radius: 30% 30% 30% 30% / 15% 15% 15% 15%; /* Organic fabric curve */
+            animation: bandSlide 5s ease-in-out infinite alternate;
+        }
+        
+        .saffron-band { background: var(--saffron); animation-delay: 0s; }
+        .white-band { 
+            background: #FFFFFF; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            animation-delay: 0.2s; 
+            z-index: 2; 
+        }
+        .green-band { background: var(--green); animation-delay: 0.4s; }
+
+        @keyframes bandSlide {
+            0% { transform: translateX(-1%) skewY(-1deg); }
+            100% { transform: translateX(1%) skewY(1deg); }
+        }
+
+        .small-rotating-chakra {
+            height: 90%;
+            width: auto;
+            animation: fastSpin 8s linear infinite;
+            opacity: 0.9;
+        }
+        
+        @keyframes fastSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 2. Menu Clean up (Hiding non-essential items) */
+        #mobileMenu button[onclick*='spotlight.html'],
+        #mobileMenu button[onclick*='public_thoughts.html'] {
+            display: none !important;
+        }
+        
+        /* 3. Return to Home Professional Hover */
+        #mobileMenu button[onclick*='index.html'] {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        #mobileMenu button[onclick*='index.html']:hover {
+            color: var(--saffron) !important;
+            padding-left: 20px;
+            background: rgba(10, 25, 47, 0.02);
+            border-radius: 8px;
+        }
+        #mobileMenu button[onclick*='index.html']::after {
+            content: '\f061';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        #mobileMenu button[onclick*='index.html']:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 4. Priority Reordering (Modules first, Hero Text later) */
+        .bg-texture { order: -5; }
+        .tricolor-strip { order: -4; }
+        .header { order: -3; }
+        #mobileMenu { order: -2; }
+        
+        /* Spacing up learning sections for mobile-first */
+        #learnView, #courseDetailView, #lectureView, #leadView { 
+            order: -1; 
+            margin-top: 25px; 
+        }
+        
+        /* Repositioning and restyling Hero to the bottom naturally via flex */
+        #heroSection { 
+            order: 10; 
+            margin-top: 40px; 
+            border-top: 1px solid var(--grey-border); 
+            padding-top: 40px; 
+            background: transparent; 
+        }
+        footer { order: 20; }
+
+        /* 5. Rewrite Hero visually without deleting characters */
+        .hero-title { font-size: 0 !important; }
+        .hero-title::after {
+            content: 'National Civic Empowerment Initiative';
+            font-size: 22px; 
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            color: var(--navy-primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+        .hero-subtitle { font-size: 0 !important; margin-bottom: 20px !important;}
+        .hero-subtitle::after {
+            content: 'Structured educational pathways designed to cultivate profound civic understanding, policy awareness, and national progress. Access modules to begin your learning journey.';
+            font-size: 13px;
+            color: var(--grey-text);
+            line-height: 1.6;
+            display: block;
+        }
+
+        /* 6. Ed-Tech Premium Course Cards */
+        .course-card {
+            border-radius: 12px !important;
+            border: 1px solid rgba(226, 232, 240, 0.8) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02) !important;
+            background: linear-gradient(to bottom, #ffffff, #fcfdfd) !important;
+            position: relative;
+            overflow: hidden;
+            padding: 24px !important;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--saffron), var(--green));
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .course-card:hover::before { opacity: 1; }
+        .course-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02) !important;
+            border-color: transparent !important;
+        }
+        .card-title { font-size: 16px !important; letter-spacing: -0.3px; }
+        .card-author { color: var(--navy-light) !important; font-size: 11px !important; display: flex; align-items: center; gap: 6px; }
+        .card-author::before { content: '\f007'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--saffron); }
+        .badge { border-radius: 20px !important; padding: 6px 14px !important; font-size: 11px !important; }
+
+        /* 7. Previous Courses Compact List Layout */
+        .previous-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+        .previous-grid .course-card {
+            flex-direction: row !important;
+            align-items: center !important;
+            padding: 16px 20px !important;
+            border-left: 4px solid var(--badge-completed) !important;
+            background: #F8FAFC !important;
+        }
+        .previous-grid .card-title { margin-bottom: 0 !important; font-size: 15px !important; flex: 1; }
+        .previous-grid .card-duration { margin-bottom: 0 !important; margin-right: 20px; }
+        .previous-grid .card-author { display: none !important; }
+        
+        /* 8. Course & Lecture Detail Upgrades */
+        .course-detail-header {
+            border: none !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03) !important;
+            border-radius: 16px !important;
+            background: linear-gradient(135deg, var(--navy-primary), var(--navy-light)) !important;
+            color: var(--white) !important;
+            padding: 40px 20px !important;
+            position: relative; overflow: hidden;
+            text-align: left !important; /* Professional alignment */
+        }
+        .course-detail-header::before {
+            content: '\f19d'; /* Graduation cap */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute; right: -20px; bottom: -20px;
+            font-size: 120px; opacity: 0.05; color: var(--white);
+        }
+        .detail-title { color: var(--white) !important; font-size: 26px !important; }
+        .detail-meta { color: rgba(255,255,255,0.8) !important; justify-content: flex-start !important;}
+        .detail-desc { color: rgba(255,255,255,0.9) !important; margin-inline: 0 !important; }
+        
+        .lectures-list {
+            border: none !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
+            border-radius: 12px !important;
+        }
+        .lecture-item {
+            padding: 20px 24px !important;
+            border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+        }
+        .lec-num { background: rgba(10, 25, 47, 0.05) !important; color: var(--navy-primary) !important; }
+        
+        .lecture-container {
+            border: none !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04) !important;
+            border-radius: 12px !important;
+            padding: 40px !important;
+        }
+        
+        /* 9. Buttons and Micro-interactions */
+        .btn-back {
+            transition: all 0.3s ease !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            background: rgba(10, 25, 47, 0.05) !important;
+        }
+        .btn-back:hover {
+            background: var(--navy-primary) !important;
+            color: var(--white) !important;
+            transform: translateX(-5px);
+        }
+        .btn-primary { border-radius: 25px !important; padding: 12px 28px !important; font-size: 13px !important; }
+        
+        /* 10. Smooth fade-in and Layout Adjustments */
+        @keyframes subtleFadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .course-card { animation: subtleFadeUp 0.5s ease backwards; }
+        .course-card:nth-child(1) { animation-delay: 0.1s; }
+        .course-card:nth-child(2) { animation-delay: 0.2s; }
+        .course-card:nth-child(3) { animation-delay: 0.3s; }
+        .course-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .section-title { font-size: 18px !important; letter-spacing: -0.5px; }
+        .course-tab { font-size: 13px !important; padding-bottom: 8px !important; }
+
+        /* Responsive specific overrides */
+        @media (min-width: 768px) { 
+            .hero-title::after { font-size: 28px; } 
+            .hero-subtitle::after { font-size: 14px; }
+            .card-title { font-size: 18px !important; }
+        }
+        @media (max-width: 768px) {
+            .course-detail-header { padding: 30px 20px !important; }
+            .detail-title { font-size: 22px !important; }
+            .header { padding: 0 15px !important; }
+            .content-container { padding: 0 15px !important; }
+            .lecture-container { padding: 25px 15px !important; }
+            
+            .previous-grid .course-card { flex-direction: column !important; align-items: flex-start !important; }
+            .previous-grid .card-duration { margin-top: 10px !important; }
+        }
     </style>
 </head>
 <body>
+    <div class="tricolor-illumination"></div>
+    
+    <div class="waving-flag-watermark">
+        <div class="w-band saffron-band"></div>
+        <div class="w-band white-band">
+            <svg class="small-rotating-chakra" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="none" stroke="#172A45" stroke-width="2"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#172A45" stroke-width="0.5"/>
+                <circle cx="50" cy="50" r="8" fill="none" stroke="#172A45" stroke-width="2"/>
+                <g stroke="#172A45" stroke-width="1.2">
+                    <line x1="50" y1="2" x2="50" y2="98"/>
+                    <line x1="62.4" y1="3.7" x2="37.6" y2="96.3"/>
+                    <line x1="74" y1="8.5" x2="26" y2="91.5"/>
+                    <line x1="83.9" y1="16.1" x2="16.1" y2="83.9"/>
+                    <line x1="91.5" y1="26" x2="8.5" y2="74"/>
+                    <line x1="96.3" y1="37.6" x2="3.7" y2="62.4"/>
+                    <line x1="98" y1="50" x2="2" y2="50"/>
+                    <line x1="96.3" y1="62.4" x2="3.7" y2="37.6"/>
+                    <line x1="91.5" y1="74" x2="8.5" y2="26"/>
+                    <line x1="83.9" y1="83.9" x2="16.1" y2="16.1"/>
+                    <line x1="74" y1="91.5" x2="26" y2="8.5"/>
+                    <line x1="62.4" y1="96.3" x2="37.6" y2="3.7"/>
+                </g>
+            </svg>
+        </div>
+        <div class="w-band green-band"></div>
+    </div>
+
+    <div id="scrollProgressBar" style="position:fixed; top:3px; left:0; height:3px; background:var(--navy-primary); width:0%; z-index:9999; transition:width 0.1s;"></div>
 
     <div class="bg-texture"></div>
     <div class="tricolor-strip"></div>
@@ -247,7 +577,7 @@
 
     <div class="mobile-menu" id="mobileMenu">
         <button class="close-menu" onclick="UI.toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
-        <button onclick="https://30558201.github.io/Viksit-Bharat/index.html"><i class="fa-solid fa-house"></i> Return to Home</button>
+        <button onclick="window.location.href='https://30558201.github.io/Viksit-Bharat/index.html'"><i class="fa-solid fa-house"></i> Return to Home</button>
         <button onclick="window.location.href='spotlight.html'"><i class="fa-solid fa-newspaper"></i> National Spotlight</button>
         <button onclick="window.location.href='public_thoughts.html'"><i class="fa-solid fa-users"></i> Public Thoughts</button>
     </div>
@@ -330,7 +660,7 @@
                     <h3 class="assessment-title">Assessment Questions</h3>
                     <div id="lvQuestions"></div>
                     <div class="submission-note">
-                        Submit answers via registered email: <strong style="color:var(--navy-primary);">submissions@viksitbharat.in</strong>
+                        Submit answers via registered email: <strong style="color:var(--navy-primary);">office.viksitbharat@gmail.com</strong>
                     </div>
                 </div>
             </div>
@@ -648,6 +978,39 @@
         window.UI = UI;
         window.Logic = Logic;
         window.addEventListener('DOMContentLoaded', Logic.init);
+
+        // =========================================================
+        // STRICT NON-DESTRUCTIVE ENHANCEMENT JAVASCRIPT
+        // =========================================================
+
+        // 1. Structural Logic for Previous Grid format
+        document.getElementById('tabCompleted').addEventListener('click', () => {
+            document.getElementById('courseGrid').classList.add('previous-grid');
+        });
+        document.getElementById('tabOngoing').addEventListener('click', () => {
+            document.getElementById('courseGrid').classList.remove('previous-grid');
+        });
+
+        // 2. Advanced Header Shadow and Scroll Progress
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 10) {
+                header.style.boxShadow = '0 10px 30px rgba(10, 25, 47, 0.08)';
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            } else {
+                header.style.boxShadow = 'var(--shadow-sm)';
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            }
+            
+            // Scroll Progress Calculation
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            if(height > 0) {
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('scrollProgressBar').style.width = scrolled + '%';
+            }
+        });
+
     </script>
 </body>
 </html>
