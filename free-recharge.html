@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security Awareness Campaign</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .landing-card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+        .landing-card h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #38bdf8;
+        }
+        .landing-card p {
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .campaign-btn {
+            background: #e11d48;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .campaign-btn:hover {
+            background: #be123c;
+        }
+        
+        /* Fullscreen Hacking Simulation Overlay */
+        #prank-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            color: #ef4444;
+            z-index: 99999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #prank-overlay h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+        }
+        #prank-overlay p {
+            color: #f8fafc;
+            font-size: 1.2rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        .highlight-warning {
+            color: #4ade80;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
 
+    <!-- Initial Landing Page Content -->
+    <div class="landing-card" id="welcome-card">
+        <h1>Cyber Security Interactive Demo</h1>
+        <p>Yeh dekhiye ki anjaane links ya files click karne par kaise cyber threats real-time mein darr ya nuksaan paida kar sakte hain.</p>
+        <button class="campaign-btn" onclick="launchCampaign()">Start Interactive Demo</button>
+    </div>
+
+    <!-- Fullscreen Immersive Overlay -->
+    <div id="prank-overlay">
+        <h1 id="main-title">⚠️ YOUR PHONE IS HACKED! ⚠️</h1>
+        <p id="main-desc">Unauthorized access detected. Downloading personal photos, contacts, and banking credentials...</p>
+    </div>
+
+    <script>
+        function launchCampaign() {
+            const elem = document.documentElement;
+            
+            // Browser ko full-screen mode mein daalne ki koshish (address bar hide karne ke liye)
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => {
+                    console.log("Fullscreen request blocked or denied: ", err);
+                });
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+
+            // Welcome card chupayein aur immersive red/black screen overlay dikhayein
+            document.getElementById('welcome-card').style.display = 'none';
+            const overlay = document.getElementById('prank-overlay');
+            const mainTitle = document.getElementById('main-title');
+            const mainDesc = document.getElementById('main-desc');
+
+            overlay.style.display = 'flex';
+
+            // 5 second baad awareness message reveal hoga
+            setTimeout(() => {
+                mainTitle.style.color = '#4ade80';
+                mainTitle.innerText = '🛡️ AWARENESS CAMPAIGN 🛡️';
+                mainDesc.innerHTML = 'Yeh sirf ek simulation tha!<br><span class="highlight-warning">Asli zindagi mein kabhi bhi kisi anjaane link, APK file ya phishing message par click na karein.</span> Hamesha satark rahein, surakshit rahein.';
+            }, 5000);
+
+            // Total 10 seconds ke baad fullscreen apne aap exit ho jayega aur normal page aa jayega
+            setTimeout(() => {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                }
+                overlay.style.display = 'none';
+                document.getElementById('welcome-card').style.display = 'block';
+                
+                // Reset text for future runs
+                mainTitle.style.color = '#ef4444';
+                mainTitle.innerText = '⚠️ YOUR PHONE IS HACKED! ⚠️';
+                mainDesc.innerText = 'Unauthorized access detected. Downloading personal photos, contacts, and banking credentials...';
+            }, 10000);
+        }
+    </script>
+
+</body>
+</html>
