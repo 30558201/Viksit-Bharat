@@ -2,153 +2,156 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Security Awareness Campaign</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Error</title>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: monospace;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f172a;
-            color: #ffffff;
+            background-color: #000;
+            color: #0f0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            touch-action: none; /* Touch events block karne ke liye */
         }
-        .landing-card {
-            background: #1e293b;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-        }
-        .landing-card h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #38bdf8;
-        }
-        .landing-card p {
-            color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        .campaign-btn {
-            background: #e11d48;
+
+        /* Fake Download Button */
+        #start-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #3b82f6;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.2s;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
         }
-        .campaign-btn:hover {
-            background: #be123c;
-        }
-        
-        /* Fullscreen Hacking Simulation Overlay */
-        #prank-overlay {
+
+        /* Glitch & Hacked Screen */
+        #hacked-screen {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #000000;
-            color: #ef4444;
-            z-index: 99999;
+            width: 100%;
+            height: 100%;
+            background-color: #990000;
+            color: white;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 20px;
-            font-family: 'Courier New', Courier, monospace;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
         }
-        #prank-overlay h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
-        }
-        #prank-overlay p {
-            color: #f8fafc;
-            font-size: 1.2rem;
-            max-width: 600px;
-            line-height: 1.6;
-        }
-        .highlight-warning {
-            color: #4ade80;
+
+        .glitch-text {
+            font-size: 2.5rem;
             font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
+        .code-lines {
+            font-size: 14px;
+            color: #ffcccc;
+            text-align: left;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Awareness Screen */
+        #awareness-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a;
+            color: white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2000;
+            font-family: Arial, sans-serif;
+        }
+
+        #awareness-screen h2 { color: #4ade80; margin-bottom: 15px; }
+        #awareness-screen p { font-size: 16px; line-height: 1.6; color: #cbd5e1; }
     </style>
 </head>
 <body>
 
-    <!-- Initial Landing Page Content -->
-    <div class="landing-card" id="welcome-card">
-        <h1>JIO/AIRTLE FREE RECHARGE 2026</h1>
-        <p>Yeh dekhiye ki anjaane links ya files click karne par kaise cyber threats real-time mein darr ya nuksaan paida kar sakte hain.</p>
-        <button class="campaign-btn" onclick="launchCampaign()">Start Interactive Demo</button>
+    <button id="start-btn" onclick="triggerFreeze()">Download File</button>
+
+    <!-- Frozen Red Screen -->
+    <div id="hacked-screen">
+        <div class="glitch-text">FATAL ERROR</div>
+        <div class="glitch-text" style="font-size: 1.5rem;">SYSTEM CORRUPTED</div>
+        <div class="code-lines">
+            > Extracting private keys...<br>
+            > Accessing gallery_DCIM...<br>
+            > Bypassing lock screen...<br>
+            > OVERLOADING CPU...
+        </div>
     </div>
 
-    <!-- Fullscreen Immersive Overlay -->
-    <div id="prank-overlay">
-        <h1 id="main-title">⚠️ YOUR PHONE IS HACKED! ⚠️</h1>
-        <p id="main-desc">Unauthorized access detected. Downloading personal photos, contacts, and banking credentials...</p>
+    <!-- Awareness Message -->
+    <div id="awareness-screen">
+        <h2>🛡️ Screen Unfrozen!</h2>
+        <p>Aapka phone bilkul theek hai. Pichle 4 second ke liye aapka screen completely freeze ho gaya tha.</p>
+        <br>
+        <p>Sochiye agar yeh koi asli malware hota? Anjaani files ya links download karne se cyber criminals aapke phone ka poora control le sakte hain.</p>
+        <br>
+        <p style="color: #fbbf24; font-weight: bold;">Stay Alert. Think Before You Click.</p>
     </div>
 
     <script>
-        function launchCampaign() {
-            const elem = document.documentElement;
-            
-            // Browser ko full-screen mode mein daalne ki koshish (address bar hide karne ke liye)
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => {
-                    console.log("Fullscreen request blocked or denied: ", err);
-                });
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE/Edge */
-                elem.msRequestFullscreen();
-            }
+        // Back button trap
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
 
-            // Welcome card chupayein aur immersive red/black screen overlay dikhayein
-            document.getElementById('welcome-card').style.display = 'none';
-            const overlay = document.getElementById('prank-overlay');
-            const mainTitle = document.getElementById('main-title');
-            const mainDesc = document.getElementById('main-desc');
+        function triggerFreeze() {
+            const btn = document.getElementById('start-btn');
+            const hackedScreen = document.getElementById('hacked-screen');
+            const awarenessScreen = document.getElementById('awareness-screen');
 
-            overlay.style.display = 'flex';
+            // 1. Red hacked screen dikhao
+            btn.style.display = 'none';
+            hackedScreen.style.display = 'flex';
 
-            // 5 second baad awareness message reveal hoga
+            // 2. SetTimeout lagaya hai taki browser ko red screen render karne ka 50ms ka time mil jaye
             setTimeout(() => {
-                mainTitle.style.color = '#4ade80';
-                mainTitle.innerText = '🛡️ AWARENESS CAMPAIGN 🛡️';
-                mainDesc.innerHTML = 'Yeh sirf ek simulation tha!<br><span class="highlight-warning">Asli zindagi mein kabhi bhi kisi anjaane link, APK file ya phishing message par click na karein.</span> Hamesha satark rahein, surakshit rahein.';
-            }, 5000);
-
-            // Total 10 seconds ke baad fullscreen apne aap exit ho jayega aur normal page aa jayega
-            setTimeout(() => {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen().catch(err => console.log(err));
-                }
-                overlay.style.display = 'none';
-                document.getElementById('welcome-card').style.display = 'block';
                 
-                // Reset text for future runs
-                mainTitle.style.color = '#ef4444';
-                mainTitle.innerText = '⚠️ YOUR PHONE IS HACKED! ⚠️';
-                mainDesc.innerText = 'Unauthorized access detected. Downloading personal photos, contacts, and banking credentials...';
-            }, 10000);
+                // 3. ACTUAL FREEZE LOGIC (Main thread blocking)
+                // Yeh while loop browser ko 4 second (4000ms) ke liye poori tarah hang kar dega
+                const freezeDuration = 4000; 
+                const start = Date.now();
+                while (Date.now() - start < freezeDuration) {
+                    // Is block ke andar browser kuch bhi process nahi kar sakta
+                    // Touch, scroll, back button sab ruk jayega
+                }
+
+                // 4. 4 second baad loop khatam hoga aur awareness screen aa jayegi
+                hackedScreen.style.display = 'none';
+                awarenessScreen.style.display = 'flex';
+
+            }, 50); 
         }
     </script>
 
