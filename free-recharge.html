@@ -3,47 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>National Cyber Suraksha | Device Scanner</title>
+    <title>Bharat Cyber Suraksha Kavach | Security Scan</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            user-select: none; /* Text selection disable karne ke liye */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        body {
-            background-color: #f4f6f9;
-            overflow: hidden; /* Scroll bilkul band */
+        /* Prevent overscroll bounce on mobile */
+        body, html {
+            background-color: #f8fafc;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none; 
+            touch-action: pan-y; /* Default behavior before hack */
         }
 
-        /* --- 1. Official Government Style Landing Page --- */
+        /* --- 1. Government Landing Page --- */
         #landing-page {
-            height: 100vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
             background: white;
-            transition: all 0.3s;
+            position: relative;
+            z-index: 10;
         }
 
         .gov-header {
-            background: #1a365d;
+            background: #1e3a8a;
+            background: linear-gradient(90deg, #1e3a8a 0%, #172554 100%);
             color: white;
             padding: 15px 20px;
             display: flex;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 4px solid #f59e0b;
         }
 
         .emblem {
-            font-size: 30px;
+            font-size: 32px;
             margin-right: 15px;
-            color: #fbbf24;
+            color: #fbd38d;
         }
 
-        .header-text h1 { font-size: 18px; font-weight: 600; text-transform: uppercase;}
-        .header-text p { font-size: 12px; opacity: 0.8; }
+        .header-text h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+        .header-text p { font-size: 11px; opacity: 0.9; }
 
         .content {
             padding: 30px 20px;
@@ -51,52 +59,64 @@
             flex-grow: 1;
         }
 
-        .trust-badge {
-            display: inline-block;
+        .badge {
+            display: inline-flex;
+            align-items: center;
             background: #dcfce7;
             color: #166534;
-            padding: 5px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            border: 1px solid #bbf7d0;
         }
 
         .scan-btn {
             background: #2563eb;
             color: white;
             border: none;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 18px 30px;
+            font-size: 16px;
+            font-weight: 800;
             border-radius: 8px;
             margin-top: 30px;
-            width: 90%;
-            max-width: 350px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            animation: pulse 2s infinite;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+            cursor: pointer;
+            text-transform: uppercase;
         }
 
-        /* --- 2. Scanning Console (Terminal Style) --- */
+        /* --- 2. Scanning Terminal --- */
         #scan-console {
             display: none;
-            height: 100vh;
-            background-color: #0f172a;
+            height: 100%;
+            background-color: #020617;
             color: #10b981;
             padding: 20px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Courier, monospace;
             flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
         }
 
-        .log-line { margin-bottom: 10px; font-size: 14px; opacity: 0; animation: fadeIn 0.1s forwards;}
+        .log-line { 
+            margin-bottom: 8px; 
+            font-size: 13px; 
+            line-height: 1.4;
+        }
 
-        /* --- 3. Full Hack & Siren Screen --- */
+        /* --- 3. Hacked & Locked Screen --- */
         #hacked-screen {
             display: none;
-            height: 100vh;
-            width: 100vw;
+            height: 100%;
+            width: 100%;
             background-color: #000;
-            color: red;
+            color: #ff0000;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -104,205 +124,236 @@
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 99999;
-            /* Yeh class lagne par touch, swipe sab disable ho jayega */
-            pointer-events: none; 
-            touch-action: none;
+            z-index: 999999;
         }
 
-        .flashing {
-            animation: flashBg 0.2s infinite;
-        }
+        .flashing { animation: flashBg 0.15s infinite; }
+        .skull { font-size: 90px; margin-bottom: 15px; animation: shake 0.3s infinite; }
+        .danger-text { font-size: 28px; font-weight: 900; letter-spacing: 1px; margin-bottom: 10px;}
 
-        .skull {
-            font-size: 100px;
-            margin-bottom: 20px;
-            animation: shake 0.4s infinite;
-        }
-
-        .danger-text { font-size: 30px; font-weight: 900; letter-spacing: 2px; }
-
-        /* --- 4. Awareness Result --- */
+        /* --- 4. Awareness Conclusion --- */
         #awareness-screen {
             display: none;
-            height: 100vh;
-            background: #1e293b;
+            height: 100%;
+            background: #0f172a;
             color: white;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 30px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000000;
         }
 
-        /* Animations */
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes flashBg { 0% { background-color: #000; } 50% { background-color: #990000; } 100% { background-color: #000; } }
-        @keyframes shake { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(2px, -2px); } }
+        @keyframes flashBg { 0%, 100% { background-color: #000; } 50% { background-color: #7f1d1d; } }
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-3px, 3px); } 50% { transform: translate(3px, -3px); } 75% { transform: translate(-3px, -3px); } }
     </style>
 </head>
 <body>
 
-    <!-- 1. Official Landing Page -->
+    <!-- 1. Government Landing Page -->
     <div id="landing-page">
         <div class="gov-header">
-            <div class="emblem">☸</div>
+            <div class="emblem">🛡️</div>
             <div class="header-text">
-                <h1>National Cyber Suraksha</h1>
-                <p>Digital Device Security Initiative</p>
+                <h1>National Cyber Kavach</h1>
+                <p>Digital Device Security Initiative | Govt. Advisory</p>
             </div>
         </div>
         <div class="content">
-            <div class="trust-badge">✓ Secure 256-bit Connection</div>
-            <h2 style="color: #1e293b; margin-bottom: 15px;">Check Your Phone Security</h2>
-            <p style="color: #64748b; font-size: 15px; line-height: 1.6;">
-                Government advisory recommends regular scanning of mobile devices to detect malware, spyware, and unauthorized access.
+            <div class="badge">✓ 256-bit Secure Gateway</div>
+            <h2 style="color: #0f172a; margin-bottom: 15px; font-size: 22px;">Device Vulnerability Scanner</h2>
+            <p style="color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
+                As per the latest cyber security guidelines, it is highly recommended to scan your device for hidden spyware, trojans, and unauthorized root access.
             </p>
-            <br>
-            <p style="color: #64748b; font-size: 14px;">Tap below to initiate a free, deep system scan.</p>
-            <!-- User click triggers fullscreen and audio context -->
-            <button class="scan-btn" id="start-btn" onclick="startScan()">START DEEP SCAN</button>
+            <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; font-size: 13px; color: #334155; text-align: left; border: 1px solid #e2e8f0;">
+                <b>Note:</b> This scan will securely analyze your device's memory, network ports, and installed applications locally.
+            </div>
+            <button class="scan-btn" onclick="startScan()">Proceed To Deep Scan</button>
         </div>
     </div>
 
-    <!-- 2. Terminal Scanning Interface -->
+    <!-- 2. Scanning Terminal -->
     <div id="scan-console">
-        <div style="color: white; font-weight: bold; margin-bottom: 20px; font-size: 18px;">
-            Initializing Protocol...
+        <div style="color: #fff; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+            SECURE TERMINAL v2.4.1
         </div>
         <div id="log-container"></div>
     </div>
 
     <!-- 3. Hacked / Locked Screen -->
-    <div id="hacked-screen" class="flashing">
+    <div id="hacked-screen">
         <div class="skull">☠️</div>
-        <div class="danger-text">SYSTEM COMPROMISED</div>
-        <br>
-        <p style="font-size: 18px; color: white;">MALWARE EXECUTING</p>
-        <p style="font-size: 14px; color: yellow; margin-top: 10px;">Downloading personal media and banking data...</p>
+        <div class="danger-text">DEVICE COMPROMISED</div>
+        <div style="font-size: 16px; color: white; font-weight: bold; margin-bottom: 10px;">ZERO-DAY EXPLOIT ACTIVATED</div>
+        <div style="font-size: 14px; color: #fbbf24; font-family: monospace;">Extracting Banking Credentials...</div>
+        <div style="font-size: 14px; color: #fbbf24; font-family: monospace;">Uploading Gallery Data [34%]...</div>
     </div>
 
-    <!-- 4. Awareness Conclusion -->
+    <!-- 4. Awareness Screen -->
     <div id="awareness-screen">
-        <div style="font-size: 60px; margin-bottom: 10px;">🛡️</div>
-        <h2 style="color: #4ade80; margin-bottom: 15px;">AWARENESS CAMPAIGN</h2>
-        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;">
-            Aapka phone bilkul surakshit hai! Pichle kuch seconds mein jo hua, woh sirf ek browser simulation tha.
+        <div style="font-size: 60px; margin-bottom: 15px;">✅</div>
+        <h2 style="color: #34d399; margin-bottom: 15px;">AWARENESS SIMULATION</h2>
+        <p style="font-size: 15px; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;">
+            Aapka device bilkul surakshit hai. Yeh ek authorized cyber security awareness simulation tha.
         </p>
-        <p style="color: #fbbf24; font-weight: bold;">
-            Lekin sochiye, agar aapne kisi anjaan link par click karke sach mein koi fake 'Security Scanner' app install kar liya hota?
-        </p>
-        <br>
-        <p style="font-size: 14px;">"Cyber criminals hamesha trust (jaise Govt ya Bank ka naam) ka sahara lekar aapko bewakoof banate hain. Satark Rahein!"</p>
-        <button onclick="location.reload()" style="margin-top: 30px; padding: 12px 25px; background: white; color: #1e293b; border: none; font-weight: bold; border-radius: 5px;">Restart Simulation</button>
+        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+            <p style="color: #fca5a5; font-size: 14px; line-height: 1.5;">
+                Asli zindagi mein, attackers isi tarah government ya bank ka fake page banakar aapko link bhejte hain. Ek click se aapka control unke paas ja sakta hai.
+            </p>
+        </div>
+        <p style="color: #fbbf24; font-weight: bold; font-size: 16px;">Satark Rahein. Surakshit Rahein.</p>
+        <button onclick="location.reload()" style="margin-top: 30px; padding: 12px 30px; background: white; color: #0f172a; border: none; font-weight: bold; border-radius: 6px; cursor: pointer;">Close & Restart</button>
     </div>
 
     <script>
         let audioCtx, oscillator, sirenInterval;
 
-        // JS level Touch Blocking function
-        function blockTouch(e) {
+        // --- Aggressive Event Blocker ---
+        function blockAction(e) {
             e.preventDefault();
+            e.stopPropagation();
+            return false;
         }
 
-        // Fake device data generation using real browser info
-        const deviceInfo = [
-            "> Establishing secure connection...",
-            "> Fetching Device Fingerprint...",
-            `> OS/Platform: ${navigator.platform}`,
-            `> Screen Resolution: ${screen.width}x${screen.height}`,
-            `> Hardware Cores Detected: ${navigator.hardwareConcurrency || 'Unknown'}`,
-            `> Device Memory (RAM): ~${navigator.deviceMemory || '4'} GB`,
-            "> Scanning file system...",
-            "> Checking network ports...",
-            "> Analyzing installed applications...",
-            "> Checking for hidden rootkits...",
-            "<span style='color: yellow;'>! WARNING: Suspicious activity found in sector 4.</span>",
-            "<span style='color: red; font-weight:bold;'>! CRITICAL VULNERABILITY DETECTED !</span>",
-            "<span style='color: red; font-weight:bold;'>! PAYLOAD INJECTED BY REMOTE SERVER !</span>"
-        ];
+        function lockDevice() {
+            // Screen par koi bhi touch, swipe, click ya right-click block karega
+            document.body.style.touchAction = 'none';
+            window.addEventListener('touchstart', blockAction, { passive: false });
+            window.addEventListener('touchmove', blockAction, { passive: false });
+            window.addEventListener('touchend', blockAction, { passive: false });
+            window.addEventListener('contextmenu', blockAction, { passive: false });
+            window.addEventListener('keydown', blockAction, { passive: false });
+        }
 
-        function startScan() {
-            // 1. Enter Fullscreen (Hides URL bar)
+        function unlockDevice() {
+            document.body.style.touchAction = 'pan-y';
+            window.removeEventListener('touchstart', blockAction);
+            window.removeEventListener('touchmove', blockAction);
+            window.removeEventListener('touchend', blockAction);
+            window.removeEventListener('contextmenu', blockAction);
+            window.removeEventListener('keydown', blockAction);
+        }
+
+        // --- Fetch Real Device Details ---
+        async function getDeviceLogs() {
+            let batteryText = "Scanning...";
+            let netType = "Unknown";
+            
+            // Get Battery if supported
+            if (navigator.getBattery) {
+                try {
+                    let bat = await navigator.getBattery();
+                    batteryText = `${Math.round(bat.level * 100)}% (${bat.charging ? 'Charging' : 'On Battery'})`;
+                } catch(e) {}
+            }
+            
+            // Get Network if supported
+            if (navigator.connection && navigator.connection.effectiveType) {
+                netType = navigator.connection.effectiveType.toUpperCase();
+            }
+
+            // Fake IP Generator
+            let fakeIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*10)}.${Math.floor(Math.random()*255)}`;
+
+            return [
+                "> Establishing encrypted tunnel...",
+                "> Connecting to central database...",
+                `> Resolving Client IP: ${fakeIP}`,
+                `> Connection Type: ${netType} Network detected`,
+                `> OS Platform: ${navigator.platform}`,
+                `> Screen Dimensions: ${window.screen.width}x${window.screen.height}`,
+                `> Hardware Cores: ${navigator.hardwareConcurrency || 4} threads`,
+                `> Battery Status: ${batteryText}`,
+                "> Analyzing file permissions...",
+                "> Scanning internal memory sectors...",
+                "> Verifying background processes...",
+                "<span style='color: #fbbf24;'>! ALERT: Unsigned background process detected.</span>",
+                "<span style='color: #fbbf24;'>! ALERT: Port 8080 transmitting data.</span>",
+                "<span style='color: #ff0000; font-weight:bold;'>! CRITICAL: TROJAN.ANDROID.RANSOM DETECTED</span>",
+                "<span style='color: #ff0000; font-weight:bold;'>! SYSTEM CONTROL OVERRIDDEN BY REMOTE SERVER</span>"
+            ];
+        }
+
+        async function startScan() {
+            // Enter Fullscreen mode immediately
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(()=>{});
             }
 
-            // 2. Setup Audio Context (Ready to play siren later)
+            // Prepare Audio (Requires user interaction to start)
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // 3. Switch UI
+
             document.getElementById('landing-page').style.display = 'none';
             document.getElementById('scan-console').style.display = 'flex';
 
-            // 4. Print logs one by one
+            let logs = await getDeviceLogs();
             let logContainer = document.getElementById('log-container');
             let index = 0;
 
-            let logInterval = setInterval(() => {
-                if (index < deviceInfo.length) {
+            // Typewriter effect for logs
+            let interval = setInterval(() => {
+                if (index < logs.length) {
                     let div = document.createElement('div');
                     div.className = 'log-line';
-                    div.innerHTML = deviceInfo[index];
+                    div.innerHTML = logs[index];
                     logContainer.appendChild(div);
+                    // Auto scroll to bottom
+                    window.scrollTo(0, document.body.scrollHeight);
                     index++;
                 } else {
-                    clearInterval(logInterval);
-                    setTimeout(triggerHack, 1000); // Hack triggers after scanning
+                    clearInterval(interval);
+                    setTimeout(triggerHack, 1200);
                 }
-            }, 800); // Har 0.8 second mein ek nayi line aayegi
+            }, 600); // Speed of scanning
         }
 
         function triggerHack() {
-            // 1. Show skull screen
+            // 1. Lock touch completely
+            lockDevice();
+
+            // 2. Show red skull screen
             document.getElementById('scan-console').style.display = 'none';
-            document.getElementById('hacked-screen').style.display = 'flex';
+            const hackedScreen = document.getElementById('hacked-screen');
+            hackedScreen.style.display = 'flex';
+            hackedScreen.classList.add('flashing');
 
-            // 2. Hardcore Touch Blocking via Javascript
-            // Yeh screen ke upar kisi bhi tarah ke tap, scroll, ya swipe ko rok dega
-            window.addEventListener('touchstart', blockTouch, { passive: false });
-            window.addEventListener('touchmove', blockTouch, { passive: false });
-            window.addEventListener('touchend', blockTouch, { passive: false });
-            document.onkeydown = function (e) { return false; } // Keyboard block
-
-            // 3. Start Loud Siren (Web Audio API)
+            // 3. Play hardcore Police Siren
             oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            oscillator.type = 'square'; // Harsh electronic sound
+            oscillator.type = 'sawtooth';
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            gainNode.gain.value = 0.5; // Volume (0.0 to 1.0)
+            gainNode.gain.value = 0.6; // High volume
             oscillator.start();
 
-            // Siren Police Effect (Toggling High/Low frequency)
             let isHigh = true;
             sirenInterval = setInterval(() => {
-                oscillator.frequency.setValueAtTime(isHigh ? 900 : 400, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(isHigh ? 1100 : 600, audioCtx.currentTime);
                 isHigh = !isHigh;
-            }, 300);
+            }, 250); // Fast alternation
 
-            // 4. After 5 seconds of absolute panic, stop and show awareness
+            // 4. Release lock and show awareness after 6 seconds
             setTimeout(() => {
-                // Stop audio
+                // Stop everything
                 oscillator.stop();
                 clearInterval(sirenInterval);
-                
-                // Remove touch blockers
-                window.removeEventListener('touchstart', blockTouch);
-                window.removeEventListener('touchmove', blockTouch);
-                window.removeEventListener('touchend', blockTouch);
-                document.onkeydown = null;
+                hackedScreen.classList.remove('flashing');
+                unlockDevice();
 
-                // Show Awareness UI
-                document.getElementById('hacked-screen').style.display = 'none';
-                document.getElementById('awareness-screen').style.display = 'flex';
-                
                 // Exit fullscreen
                 if (document.exitFullscreen) {
                     document.exitFullscreen().catch(()=>{});
                 }
-            }, 6000); // 6 Seconds of Panic
+
+                // Show final message
+                hackedScreen.style.display = 'none';
+                document.getElementById('awareness-screen').style.display = 'flex';
+            }, 6000);
         }
     </script>
 </body>
